@@ -1,0 +1,36 @@
+.login-container{
+    top: 50%;
+    left: 50%;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    display: flex;
+    .login-form{
+        display: flex;
+        flex-direction: column;
+        > div{
+            min-width: 280px;
+            padding: 20px 40px 20px 40px;
+            display: flex;
+            flex-direction: column;
+            background-color: #F8F8F8;
+            >p{
+                font-size: 14px;
+                line-height: 17px;
+                font-weight: 400;
+                margin: 20px auto 0px 0px;
+                text-decoration: underline;
+                color: #e75a16;
+                cursor: pointer;
+                &:hover{
+                    text-decoration: none;
+                }
+            }
+        }
+        .form-login-btn{
+            margin-top: 10px;
+        }
+        .form-btm-btn{
+            margin: 20px 40px 0px 40px;
+        }
+    }
+}

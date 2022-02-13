@@ -1,0 +1,52 @@
+.input-field-container {
+  position: relative;
+  z-index: 0;
+  margin: 20px 0px;
+  display: flex;
+  width: auto;
+  label {
+    position: absolute;
+    color: #596988;
+    font-size: 15px;
+    // font-weight: 500;
+    top: 0%;
+    transition: all 0.2s ease;
+    z-index: -1;
+  }
+  input {
+    width: 100%;
+    padding: 3px 2px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    border-bottom: 2px solid #96969683;
+    font-family: Manrope, sans-serif;
+    color: #969696;
+    font-weight: 400;
+    letter-spacing: 1px;
+    z-index: 2;
+  }
+  &:focus-within {
+    input{
+      border-bottom: 2px solid #e75a16;
+    }
+    label {
+      top: -75%;
+      font-size: 14px;
+      color: #65718a;
+      font-weight: 500;
+    }
+  }
+}
+.input-field-active {
+  label{
+    top: -75%;
+    font-size: 14px;
+    color: #65718a;
+    font-weight: 500;
+  }
+  input{
+    border-bottom: 2px solid #e75a16;
+  }
+}
