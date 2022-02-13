@@ -13,7 +13,12 @@ const MobileSchema = mongoose.Schema({
     registered: {
         type: Boolean,
         default: false,
-    }
+    },
+    // one to one relation with user - maybe in future
+    // user: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "User",
+    // }
 });
 
 const Mobile = mongoose.model("mobile", MobileSchema);

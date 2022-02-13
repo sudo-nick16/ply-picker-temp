@@ -6,11 +6,13 @@ import User from "../models/User.js";
 import Mobile from "../models/Mobile.js";
 import { setCookies } from "../utils/setCookies.js";
 import nodemailer from "nodemailer";
-
 import {
   COOKIE_NAME,
   MOBILE_TOKEN_SECRET,
+  ORIGIN,
   REFRESH_TOKEN_SECRET,
+  SMTP_PASSWORD,
+  SMTP_USER,
   TWILIO_ACCOUNT_SID,
   TWILIO_AUTH_TOKEN,
   TWILIO_NUMBER,
@@ -18,40 +20,53 @@ import {
 import { createAccessToken } from "../utils/authTokens.js";
 import { createMobileToken } from "../utils/createMobileToken.js";
 
+// creating twilio client
 const twilioClient = new twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+// create nodemailer transporter
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: SMTP_USER,
+    pass: SMTP_PASSWORD,
+  },
+});
 
 export const verifyMobile = async (req, res) => {
   const { mobileNumber } = req.body;
+  const number = `+91${mobileNumber}`;
+
+  if (!validator.isMobilePhone(number, "en-IN")) {
+    return res.status(400).json({
+      error: "Invalid mobile number",
+    });
+  }
+
+  const mobile = await Mobile.findOne({ mobile_number: number });
+
+  if (mobile && mobile.registered) {
+    return res.status(400).json({
+      error: "Mobile number already registered",
+    });
+  }
+  const otp = Math.random().toString().slice(2, 8);
+
+  // console.log(message)
+  if (!mobile) {
+    const newMobile = new Mobile({
+      mobile_number: number,
+      otp: createMobileToken(otp),
+    });
+    await newMobile.save();
+    console.log("mobile saved", newMobile);
+  } else {
+    // updating token if already tried but not registered
+    mobile.otp = createMobileToken(otp);
+    await mobile.save();
+  }
+
   try {
-    const number = `+91${mobileNumber}`;
-    if (!validator.isMobilePhone(number, "en-IN")) {
-      throw new Error("Invalid mobile number");
-    }
-
-    const mobile = await Mobile.findOne({ mobile_number: number });
-
-    if (mobile && mobile.registered) {
-      throw new Error("Mobile number already registered");
-    }
-    const otp = Math.random().toString().slice(2, 8);
-    console.log(otp);
-
-    // console.log(message)
-    if(!mobile){
-      const newMobile = new Mobile({
-        mobile_number: number,
-        otp: createMobileToken(otp),
-      });
-      
-      await newMobile.save();
-      console.log("mobile saved", newMobile);
-    }else{
-      // updating token if already tried but not registered
-      mobile.otp = createMobileToken(otp);
-      await mobile.save();
-    }
-
-
     const message = await twilioClient.messages.create({
       // messagingServiceSid: "MG9752274e9e519418a7406176694466fa",
       body: `Your OTP is ${otp}`,
@@ -66,7 +81,7 @@ export const verifyMobile = async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(400).json({
-      error: "Couldn't verify, Please try again!",
+      error: "Couldn't send the OTP, Please try again!",
     });
   }
 };
@@ -82,7 +97,7 @@ export const register = async (req, res) => {
       error: "Invalid email",
     });
   }
-  if(!validator.isMobilePhone(number, "en-IN")){
+  if (!validator.isMobilePhone(number, "en-IN")) {
     return res.status(400).json({
       error: "Invalid mobile number",
     });
@@ -99,7 +114,6 @@ export const register = async (req, res) => {
       error: "Mobile number not verified",
     });
   }
-  console.log("fuck");
   try {
     const otpDB = jwt.verify(mobile.otp, MOBILE_TOKEN_SECRET).otp;
     console.log(otpDB, otp, "hellow");
@@ -136,9 +150,9 @@ export const register = async (req, res) => {
         msg: "User created.",
       });
     } else {
-      throw new Error("User not created.");
     }
-  } catch (err) {
+  } catch (err)
+   {
     console.log(err);
     return res.status(400).json({
       error: "Error creating user.",
@@ -151,9 +165,9 @@ export const login = async (req, res) => {
   const { emailOrMobile, password } = req.body;
 
   let user;
-  if(validator.isEmail(emailOrMobile)){
+  if (validator.isEmail(emailOrMobile)) {
     user = await User.findOne({ emailOrMobile });
-  }else if(validator.isMobilePhone(`+91${emailOrMobile}`, "en-IN")){
+  } else if (validator.isMobilePhone(`+91${emailOrMobile}`, "en-IN")) {
     user = await User.findOne({ mobile_number: `+91${emailOrMobile}` });
   }
 
@@ -163,13 +177,13 @@ export const login = async (req, res) => {
     });
   }
 
-  try{
+  try {
     const isAuth = await bcryptjs.compare(password, user.password);
     console.log(isAuth);
     if (!isAuth) {
-      throw new Error("Invalid credentials");
     }
-  }catch(err){
+  }
+   catch (err) {
     return res.status(400).json({
       error: "Invalid password.",
     });
@@ -193,8 +207,76 @@ export const logout = async (req, res) => {
   });
 };
 
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  if (!validator.isEmail(email)) {
+    return res.status(400).json({
+      error: "Invalid email",
+    });
+  }
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(400).json({
+      error: "User does not exist.",
+    });
+  }
+
+  const RESET_PASSWORD_SECRET = user.password;
+
+  const payload = {
+    userId: user._id,
+    email: user.email,
+  };
+
+  const token = jwt.sign(payload, RESET_PASSWORD_SECRET, { expiresIn: "15m" });
+  const resetLink = `${ORIGIN}/reset-password/${user.id}/${token}`;
+
+  try {
+    await transporter.sendMail({
+      from: "plypickerdevs@gmail.com",
+      to: email,
+      subject: "Reset Password",
+      text: `Reset Password link: ${resetLink}`,
+      html: `<h1>Here's your reset-password url</h1><p>${resetLink}<p>`,
+    });
+    return res.status(200).json({
+      msg: "Reset link sent.",
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      error: "Error sending reset link.",
+    });
+  }
+};
+
 export const resetPassword = async (req, res) => {
-  
+  const { id, token, password } = req.body;
+  const user = await User.findById(id);
+  if (!user) {
+    return res.status(400).json({
+      error: "User does not exist.",
+    });
+  }
+  try {
+    const RESET_PASSWORD_SECRET = user.password;
+
+    const payload = jwt.verify(token, RESET_PASSWORD_SECRET);
+    if (!payload) {
+    }
+    user
+    .password = password;
+    user.token_version += 1;
+    await user.save();
+    return res.status(200).json({
+      msg: "Reset Password successfully.",
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      error: "Link Expired.",
+    });
+  }
 };
 
 export const refreshToken = async (req, res) => {
@@ -202,9 +284,9 @@ export const refreshToken = async (req, res) => {
   let payload;
   try {
     if (!token) {
-      throw new Error("Unauthorized");
     }
-    payload = jwt.verify(token, REFRESH_TOKEN_SECRET);
+    payload
+     = jwt.verify(token, REFRESH_TOKEN_SECRET);
     const user = await User.findById(payload.userId);
     if (!user) {
       return res.status(400).json({
@@ -228,3 +310,4 @@ export const refreshToken = async (req, res) => {
     });
   }
 };
+

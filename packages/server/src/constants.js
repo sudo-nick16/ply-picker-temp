@@ -11,3 +11,6 @@ export const PORT = process.env.PORT;
 export const ORIGIN = process.env.ORIGIN;
 export const TWILIO_NUMBER = process.env.TWILIO_NUMBER;
 export const MOBILE_TOKEN_SECRET = process.env.MOBILE_TOKEN_SECRET;
+export const SERVER_URL = process.env.SERVER_URL;
+export const SMTP_USER = process.env.SMTP_USER;
+export const SMTP_PASSWORD = process.env.SMTP_PASSWORD;
