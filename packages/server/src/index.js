@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 import mongoose from "mongoose";
 import cors from "cors";
 import { ORIGIN, PORT } from "./constants.js";
@@ -23,6 +24,7 @@ app.get("/", (_, res) => {
 });
 
 app.use("/api/auth",cors(corsOptions), authRoutes);
+app.use("/api", cors(corsOptions), userRoutes)
 
 console.log(`Listening on port ${PORT}`);
 

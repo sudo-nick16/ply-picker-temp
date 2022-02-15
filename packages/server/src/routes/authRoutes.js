@@ -26,7 +26,7 @@ router.post("/reset-password", (req, res) => {
 router.post("/reset-password/:id/:token", (req, res) => {
   resetPassword(req, res);
 });
-router.post("/refresh_token", (req, res) => {
+router.post("/refresh-token", (req, res) => {
   refreshToken(req, res);
 });
 router.post("/verify-mobile", (req, res) => {

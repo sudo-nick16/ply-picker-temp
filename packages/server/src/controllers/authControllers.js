@@ -43,7 +43,7 @@ export const verifyMobile = async (req, res) => {
     });
   }
 
-  const mobile = await Mobile.findOne({ mobile_number: number });
+  const mobile = await Mobile.findOne({ mobile_number: number }).exec();
 
   if (mobile && mobile.registered) {
     return res.status(400).json({
@@ -61,13 +61,13 @@ export const verifyMobile = async (req, res) => {
     await newMobile.save();
     console.log("mobile saved", newMobile);
   } else {
-    // updating token if already tried but not registered
+    // updating token if mobile has already been tried but not registered
     mobile.otp = createMobileToken(otp);
     await mobile.save();
   }
 
   try {
-    const message = await twilioClient.messages.create({
+    await twilioClient.messages.create({
       // messagingServiceSid: "MG9752274e9e519418a7406176694466fa",
       body: `Your OTP is ${otp}`,
       from: TWILIO_NUMBER,
@@ -90,7 +90,7 @@ export const register = async (req, res) => {
   const { name, email, password, mobileNumber, otp } = req.body;
   const number = `+91${mobileNumber}`;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).exec();
 
   if (!validator.isEmail(email)) {
     return res.status(400).json({
@@ -107,7 +107,7 @@ export const register = async (req, res) => {
       error: "User already exists",
     });
   }
-  const mobile = await Mobile.findOne({ mobile_number: number });
+  const mobile = await Mobile.findOne({ mobile_number: number }).exec();
   console.log("mobile", mobile);
   if (!mobile) {
     return res.status(400).json({
@@ -141,7 +141,7 @@ export const register = async (req, res) => {
     const mobile = await Mobile.findOneAndUpdate(
       { mobile_number: number },
       { registered: true }
-    );
+    ).exec();
 
     if (newUser) {
       setCookies(res, newUser);
@@ -151,8 +151,7 @@ export const register = async (req, res) => {
       });
     } else {
     }
-  } catch (err)
-   {
+  } catch (err) {
     console.log(err);
     return res.status(400).json({
       error: "Error creating user.",
@@ -166,9 +165,9 @@ export const login = async (req, res) => {
 
   let user;
   if (validator.isEmail(emailOrMobile)) {
-    user = await User.findOne({ emailOrMobile });
+    user = await User.findOne({ emailOrMobile }).exec();
   } else if (validator.isMobilePhone(`+91${emailOrMobile}`, "en-IN")) {
-    user = await User.findOne({ mobile_number: `+91${emailOrMobile}` });
+    user = await User.findOne({ mobile_number: `+91${emailOrMobile}` }).exec();
   }
 
   if (!user) {
@@ -177,13 +176,10 @@ export const login = async (req, res) => {
     });
   }
 
-  try {
-    const isAuth = await bcryptjs.compare(password, user.password);
-    console.log(isAuth);
-    if (!isAuth) {
-    }
-  }
-   catch (err) {
+  const isAuth = await bcryptjs.compare(password, user.password);
+  console.log(isAuth);
+  if (!isAuth) {
+    console.log("password not matched");
     return res.status(400).json({
       error: "Invalid password.",
     });
@@ -214,7 +210,7 @@ export const forgotPassword = async (req, res) => {
       error: "Invalid email",
     });
   }
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).exec();
   if (!user) {
     return res.status(400).json({
       error: "User does not exist.",
@@ -252,7 +248,7 @@ export const forgotPassword = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
   const { id, token, password } = req.body;
-  const user = await User.findById(id);
+  const user = await User.findById(id).exec();
   if (!user) {
     return res.status(400).json({
       error: "User does not exist.",
@@ -264,8 +260,7 @@ export const resetPassword = async (req, res) => {
     const payload = jwt.verify(token, RESET_PASSWORD_SECRET);
     if (!payload) {
     }
-    user
-    .password = password;
+    user.password = password;
     user.token_version += 1;
     await user.save();
     return res.status(200).json({
@@ -282,12 +277,14 @@ export const resetPassword = async (req, res) => {
 export const refreshToken = async (req, res) => {
   const token = req.cookies.plypicker;
   let payload;
+  if (!token) {
+    return res.status(400).json({
+      error: "No token.",
+    });
+  }
   try {
-    if (!token) {
-    }
-    payload
-     = jwt.verify(token, REFRESH_TOKEN_SECRET);
-    const user = await User.findById(payload.userId);
+    payload = jwt.verify(token, REFRESH_TOKEN_SECRET);
+    const user = await User.findById(payload.userId).exec();
     if (!user) {
       return res.status(400).json({
         error: "User does not exist",
@@ -310,4 +307,3 @@ export const refreshToken = async (req, res) => {
     });
   }
 };
-
