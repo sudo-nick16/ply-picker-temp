@@ -28,11 +28,12 @@ const Login = () => {
       withCredentials: true,
     });
     console.log(response, "response");
-    if (response.data.error) {
+    if (response.data.error && !response.data.accessToken) {
       alert(response.data.error);
-    }else{
-      console.log(response.data.accessToken);
-      dispatch(setUser(response.data.accessToken));
+    } else {
+      console.log(response.data.accessToken, true);
+      dispatch(setUser(response.data.accessToken, true));
+      navigate("/me");
     }
   };
 
@@ -61,7 +62,9 @@ const Login = () => {
             text="Login"
             onClick={loginHandler}
           />
-          <p className="" onClick={() => navigate("/reset-password")}>Forgot Password</p>
+          <p className="" onClick={() => navigate("/reset-password")}>
+            Forgot Password
+          </p>
         </div>
         <FormBottomButton
           className="form-btm-btn"

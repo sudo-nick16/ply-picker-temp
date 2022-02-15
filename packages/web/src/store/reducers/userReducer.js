@@ -3,11 +3,10 @@ export const initialState  = {
     authenticated: false,
 }
 
-export const setUser = (accessToken) => {
-    console.log(accessToken, "accessToken in reducer");
+export const setUser = (accessToken, auth) => {
     return {
         type: "SET_USER",
-        payload: accessToken
+        payload: {accessToken, auth}
     }
 }
 
@@ -28,8 +27,8 @@ export const userReducer = (state = initialState, action) => {
         case "SET_USER":
             return {
                 ...state,
-                accessToken: action.payload,
-                authenticated: true,
+                accessToken: action.payload.accessToken,
+                authenticated: action.payload.auth,
             };
         case "LOGOUT":
             return {

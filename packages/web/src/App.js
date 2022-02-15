@@ -1,22 +1,47 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
-import Login from "./pages/Login/Login";
-import ResetPassword from "./pages/ResetPassword/ResetPassword";
-import Signup from "./pages/Signup/Signup";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { API_URL } from "./constants";
+import Routes from "./Routes";
+import { setUser } from "./store/reducers/userReducer";
+import { useStore } from "./store/store";
+import useAxios from "./utils/useAxios";
 
 function App() {
-  return (
-    <>
-      <Router>
-        <Routes>
-          <Route exact path="/signup" element={<Signup />} />
-          <Route exact path="/login" element={<Login />} />
-          <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
-          <Route path="/reset-password" element={<ForgotPassword />} />
-        </Routes>
-      </Router>
-    </>
-  );
+  const [state, dispatch] = useStore();
+  const api = useAxios();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(async () => {
+    const refreshToken = async () => {
+      const response = await api.post(
+        `${API_URL}/auth/refresh-token`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (!response.data.error && response.data.accessToken) {
+        // console.log("refreshToken", response.data.accessToken);
+        dispatch(setUser(response.data.accessToken, true));
+      }else{
+        throw new Error(response.data.error);
+      }
+    };
+    try{
+      await refreshToken();
+    }catch(err){
+      console.log(err);
+    }
+    setLoading(false);
+
+  }, []);
+
+  return loading ? <div>Hello</div> : <Routes />
 }
 
 export default App;
