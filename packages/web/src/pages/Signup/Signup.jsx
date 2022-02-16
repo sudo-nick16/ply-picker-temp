@@ -52,10 +52,10 @@ const Signup = () => {
       withCredentials: true,
     });
     console.log(response, "response")
-    if(response.data.error){
+    if(response.data.error && !response.data.accessToken) {
       alert(response.data.error)
     }else{
-      dispatch(setUser(response.data.accessToken));
+      dispatch(setUser(response.data.accessToken, true));
     }
   };
 

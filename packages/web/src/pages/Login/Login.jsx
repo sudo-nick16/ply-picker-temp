@@ -5,7 +5,7 @@ import FormBottomButton from "../../components/Buttons/FormBottomButton";
 import FormButton from "../../components/Buttons/FormButton";
 import InputField from "../../components/InputField/InputField";
 import { API_URL } from "../../constants";
-import { setUser, test } from "../../store/reducers/userReducer";
+import { setUser } from "../../store/reducers/userReducer";
 import { useStore } from "../../store/store";
 import "./Login.scss";
 
@@ -17,6 +17,10 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const loginHandler = async () => {
+    if(!emailOrMobile || !password) {
+      // TODO: show error
+      return;
+    }
     const data = {
       emailOrMobile,
       password,

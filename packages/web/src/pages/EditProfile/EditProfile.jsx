@@ -5,7 +5,7 @@ import { setUser } from "../../store/reducers/userReducer";
 import { useStore } from "../../store/store";
 import useAxios from "../../utils/useAxios.js";
 
-const Profile = () => {
+const EditProfile = () => {
   const [state, dispatch] = useStore();
   const api = useAxios();
   const navigate = useNavigate();
@@ -40,7 +40,8 @@ const Profile = () => {
   return (
     <div>
       Name : {name} <br />
-      Email : {email}<br />
+      Email : {email}
+      <br />
       <button onClick={() => navigate("/me")}>Me</button>
       <button onClick={() => navigate("/profile/edit")}>Edit Profile</button>
       <button onClick={logout}>Logout</button>
@@ -50,4 +51,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default EditProfile;

@@ -6,7 +6,7 @@ const OnlyUnauthRoute = ({ children, redirectTo }) => {
 //   console.log(state, "state");
   const isAuthenticated = state.authenticated;
 
-  console.log(isAuthenticated, "isAuthenticated");
+  // console.log(isAuthenticated, "isAuthenticated");
 
   if (!isAuthenticated) {
     return children;

@@ -1,20 +1,18 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { API_URL } from "./constants";
-import Routes from "./Routes";
-import { setUser } from "./store/reducers/userReducer";
+import Routes from "./utils/Routes";
+import { logout, setUser } from "./store/reducers/userReducer";
 import { useStore } from "./store/store";
-import useAxios from "./utils/useAxios";
+import axios from "axios";
 
 function App() {
-  const [state, dispatch] = useStore();
-  const api = useAxios();
+  const [, dispatch] = useStore();
   const [loading, setLoading] = useState(true);
 
   useEffect(async () => {
     const refreshToken = async () => {
-      const response = await api.post(
+      const response = await axios.post(
         `${API_URL}/auth/refresh-token`,
         {},
         {
@@ -26,22 +24,20 @@ function App() {
       );
 
       if (!response.data.error && response.data.accessToken) {
-        // console.log("refreshToken", response.data.accessToken);
+        // console.log("refreshToken fetched");
         dispatch(setUser(response.data.accessToken, true));
-      }else{
-        throw new Error(response.data.error);
+      } else {
+        console.log(response.data.error);
+        dispatch(logout());
       }
     };
-    try{
-      await refreshToken();
-    }catch(err){
-      console.log(err);
-    }
-    setLoading(false);
 
+    await refreshToken();
+
+    setLoading(false);
   }, []);
 
-  return loading ? <div>Hello</div> : <Routes />
+  return loading ? <div>Hello</div> : <Routes />;
 }
 
 export default App;
