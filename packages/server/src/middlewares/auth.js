@@ -23,7 +23,7 @@ export const auth = (req, res, next) => {
       // throw new Error("Couldn't verify the user.");
     }
   } catch (err) {
-    // console.log(err);
+    console.log(err);
     return res.status(403).json({
       error: "User not authenticated.",
     });
