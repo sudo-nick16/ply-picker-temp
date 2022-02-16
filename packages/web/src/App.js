@@ -11,7 +11,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(async () => {
-    const refreshToken = async () => {
+    try{
       const response = await axios.post(
         `${API_URL}/auth/refresh-token`,
         {},
@@ -22,7 +22,7 @@ function App() {
           withCredentials: true,
         }
       );
-
+  
       if (!response.data.error && response.data.accessToken) {
         // console.log("refreshToken fetched");
         dispatch(setUser(response.data.accessToken, true));
@@ -30,9 +30,9 @@ function App() {
         console.log(response.data.error);
         dispatch(logout());
       }
-    };
-
-    await refreshToken();
+    }catch(err){
+      console.log(err);
+    }
 
     setLoading(false);
   }, []);

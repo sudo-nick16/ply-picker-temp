@@ -65,7 +65,7 @@ const useAxios = () => {
     },
     function (error) {
       console.log("axios error req", error);
-      return Promise.resolve(error);
+      return Promise.reject(error);
     }
   );
 
