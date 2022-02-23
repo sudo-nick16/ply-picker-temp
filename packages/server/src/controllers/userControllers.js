@@ -3,7 +3,7 @@ import { createAccessToken } from "../utils/authTokens.js";
 
 export const me = async (req, res) => {
   const u = req.user;
-  const user = await User.findById(u.userId).exec();
+  const user = await User.findById(u._id).exec();
   delete user.password;
   console.log("user", user);
 

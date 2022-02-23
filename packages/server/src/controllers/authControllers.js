@@ -90,8 +90,6 @@ export const register = async (req, res) => {
   const { name, email, password, mobileNumber, otp } = req.body;
   const number = `+91${mobileNumber}`;
 
-  const user = await User.findOne({ email }).exec();
-
   if (!validator.isEmail(email)) {
     return res.status(400).json({
       error: "Invalid email",
@@ -102,6 +100,9 @@ export const register = async (req, res) => {
       error: "Invalid mobile number",
     });
   }
+
+  const user = await User.findOne({ email }).exec();
+
   if (user) {
     return res.status(400).json({
       error: "User already exists",
@@ -138,19 +139,20 @@ export const register = async (req, res) => {
 
     await newUser.save();
 
-    const mobile = await Mobile.findOneAndUpdate(
-      { mobile_number: number },
-      { registered: true }
-    ).exec();
+    const mobile = await Mobile.findOneAndUpdate({ mobile_number: number }, [
+      {
+        $set: {
+          registered: true,
+          user: newUser._id,
+        },
+      },
+    ]).exec();
 
-    if (newUser) {
-      setCookies(res, newUser);
-      return res.status(200).json({
-        accessToken: createAccessToken(newUser),
-        msg: "User created.",
-      });
-    } else {
-    }
+    setCookies(res, newUser);
+    return res.status(200).json({
+      accessToken: createAccessToken(newUser),
+      msg: "User created.",
+    });
   } catch (err) {
     console.log(err);
     return res.status(400).json({
@@ -220,7 +222,7 @@ export const forgotPassword = async (req, res) => {
   const RESET_PASSWORD_SECRET = user.password;
 
   const payload = {
-    userId: user._id,
+    _id: user._id,
     email: user.email,
   };
 
@@ -284,7 +286,7 @@ export const refreshToken = async (req, res) => {
   }
   try {
     payload = jwt.verify(token, REFRESH_TOKEN_SECRET);
-    const user = await User.findById(payload.userId).exec();
+    const user = await User.findById(payload._id).exec();
     if (!user) {
       return res.status(400).json({
         error: "User does not exist",

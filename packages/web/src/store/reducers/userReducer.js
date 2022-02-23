@@ -22,7 +22,7 @@ export const test = () => {
     }
 }
 
-export const userReducer = (state = initialState, action) => {
+export const userReducer = (state, action) => {
     switch (action.type) {
         case "SET_USER":
             return {

@@ -21,16 +21,6 @@ const UserSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
-    cart: {
-      type: [
-        {
-          quantity: Number,
-          product_id: mongoose.Schema.Types.ObjectId,
-          price: Number,
-        },
-      ],
-      default: [],
-    },
     email_verified: {
       type: Boolean,
       default: false,
@@ -39,13 +29,34 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    joined_date: {
-      type: Date,
-      default: Date.now,
-    },
     token_version: {
       type: Number,
       default: 0,
+    },
+    dob: {
+      type: Date,
+    },
+    addresses: {
+      type: [
+        {
+          address_line_1: String,
+          address_line_2: String,
+          city: String,
+          state: String,
+          country: String,
+          pincode: String,
+        },
+      ],
+      default: [],
+    },
+    wishlist: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+        },
+      ],
+      default: [],
     },
   },
   {
@@ -61,6 +72,6 @@ UserSchema.pre("save", async function (next) {
   next();
 });
 
-const User = mongoose.model("users", UserSchema);
+const User = mongoose.model("User", UserSchema);
 
 export default User;

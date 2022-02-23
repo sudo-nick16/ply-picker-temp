@@ -12,7 +12,7 @@ export const auth = (req, res, next) => {
   const token = authorization.split(" ")[1];
   try {
     const user = jwt.verify(token, ACCESS_TOKEN_SECRET);
-    console.log(user);
+    // console.log(user);
     if (user) {
       req.user = user;
       return next();

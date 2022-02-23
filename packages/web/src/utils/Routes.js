@@ -2,11 +2,14 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import EditProfile from "../pages/EditProfile/EditProfile";
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
 import Login from "../pages/Login/Login";
+import Products from "../pages/Products/Products";
+import Product from "../pages/Product/Product";
 import Profile from "../pages/Profile/Profile";
 import ResetPassword from "../pages/ResetPassword/ResetPassword";
 import Signup from "../pages/Signup/Signup";
 import OnlyUnauthRoute from "../routes/OnlyUnauthRoute";
 import ProtectedRoute from "../routes/ProtectedRoute";
+import Cart from "../pages/Cart/Cart";
 
 const AllRoutes = () => {
   return (
@@ -30,6 +33,24 @@ const AllRoutes = () => {
             <ProtectedRoute redirectTo="/login">
               <EditProfile />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+              <Cart />
+          }
+        />
+        <Route
+          path="/products"
+          element={
+              <Products />
+          }
+        />
+        <Route
+          path="/product/:p_id"
+          element={
+              <Product />
           }
         />
         <Route
