@@ -11,7 +11,7 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(async () => {
-    try{
+    try {
       const response = await axios.post(
         `${API_URL}/auth/refresh-token`,
         {},
@@ -22,7 +22,7 @@ function App() {
           withCredentials: true,
         }
       );
-  
+
       if (!response.data.error && response.data.accessToken) {
         // console.log("refreshToken fetched");
         dispatch(setUser(response.data.accessToken, true));
@@ -30,14 +30,14 @@ function App() {
         console.log(response.data.error);
         dispatch(logout());
       }
-    }catch(err){
+    } catch (err) {
       console.log(err);
     }
 
     setLoading(false);
   }, []);
 
-  return loading ? <div>Hello</div> : <Routes />;
+  return loading ? <div>hELlo Boi</div> : <Routes />;
 }
 
 export default App;

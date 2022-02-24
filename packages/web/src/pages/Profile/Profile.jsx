@@ -46,6 +46,11 @@ const Profile = () => {
       <button onClick={logout}>Logout</button>
       <button onClick={() => navigate("/signup")}>SignUp</button>
       <button onClick={() => navigate("/login")}>Login</button>
+      <br />
+      <button onClick={() => navigate("/products")}>See Products</button>
+      <button onClick={() => navigate("/cart")}>Go to Cart</button>
+      <button onClick={() => navigate("/wishlist")}>Go to Wishlist</button>
+      <button onClick={() => navigate("/orders")}>Go to Orders</button>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const MobileSchema = mongoose.Schema(
+const MobileSchema = new mongoose.Schema(
   {
     mobile_number: {
       type: String,
@@ -16,10 +16,10 @@ const MobileSchema = mongoose.Schema(
       default: false,
     },
     // one to one relation with user - maybe in future
-    // user: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "User",
-    // }
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   {
     timestamps: true,
@@ -34,6 +34,6 @@ const MobileSchema = mongoose.Schema(
 //   next();
 // });
 
-const Mobile = mongoose.model("mobile", MobileSchema);
+const Mobile = mongoose.model("Mobile", MobileSchema);
 
 export default Mobile;

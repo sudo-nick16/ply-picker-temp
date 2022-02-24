@@ -3,7 +3,7 @@ import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "../constants.js";
 
 export const createAccessToken = (user) => {
   const payload = {
-    userId: user._id,
+    _id: user._id,
     token_version: user.token_version,
   };
   return jwt.sign(payload, ACCESS_TOKEN_SECRET, {
@@ -13,7 +13,7 @@ export const createAccessToken = (user) => {
 
 export const createRefreshToken = (user) => {
   const payload = {
-    userId: user._id,
+    _id: user._id,
     token_version: user.token_version,
   };
   return jwt.sign(payload, REFRESH_TOKEN_SECRET, {

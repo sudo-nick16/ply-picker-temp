@@ -2,11 +2,17 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import EditProfile from "../pages/EditProfile/EditProfile";
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
 import Login from "../pages/Login/Login";
+import Products from "../pages/Products/Products";
+import Product from "../pages/Product/Product";
 import Profile from "../pages/Profile/Profile";
 import ResetPassword from "../pages/ResetPassword/ResetPassword";
 import Signup from "../pages/Signup/Signup";
 import OnlyUnauthRoute from "../routes/OnlyUnauthRoute";
 import ProtectedRoute from "../routes/ProtectedRoute";
+import Cart from "../pages/Cart/Cart";
+import Wishlist from "../pages/Wishlist/Wishlist";
+import Orders from "../pages/Orders/Orders";
+import Order from "../pages/Order/Order";
 
 const AllRoutes = () => {
   return (
@@ -25,6 +31,30 @@ const AllRoutes = () => {
           }
         />
         <Route
+          path="/wishlist"
+          element={
+            <ProtectedRoute redirectTo="/login">
+              <Wishlist />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/order"
+          element={
+            <ProtectedRoute redirectTo="/login">
+              <Order />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute redirectTo="/login">
+              <Orders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/profile/edit"
           element={
             <ProtectedRoute redirectTo="/login">
@@ -32,6 +62,16 @@ const AllRoutes = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute redirectTo="/login">
+              <Cart />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/products" element={<Products />} />
+        <Route path="/product/:p_id" element={<Product />} />
         <Route
           exact
           path="/signup"
