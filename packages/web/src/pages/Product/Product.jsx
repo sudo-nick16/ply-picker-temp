@@ -20,7 +20,7 @@ const Product = () => {
 
   // only handler that matters
   const addToCart = async () => {
-    const res = await api.post(`${API_URL}/products/add-to-cart`, {
+    const res = await api.post(`${API_URL}/carts`, {
       product_id: p_id,
       quantity,
     });

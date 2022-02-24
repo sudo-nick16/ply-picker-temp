@@ -6,14 +6,44 @@ const OrderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      unique: true,
+    },
+    total: {
+      type: Number,
+      required: true,
     },
     order_items: {
       type: [
         {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "CartItem",
+          product: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+            required: true,
+            unique: true,
+          },
+          quantity: {
+            type: Number,
+            min: 1,
+            required: true,
+          },
+          price: {
+            type: Number,
+            required: true,
+          },
         },
       ],
+    },
+    payment: {
+      mode: {
+        type: String,
+        required: true,
+        default: "COD",
+      },
+      status: {
+        type: String,
+        required: true,
+        default: "Pending",
+      },
     },
   },
   {

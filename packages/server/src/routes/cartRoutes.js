@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { getMyCartItems, removeFromCart, updateQuantity } from "../controllers/cartControllers.js";
+import {
+  addToCart,
+  getMyCartItems,
+  removeFromCart,
+  updateQuantity,
+} from "../controllers/cartControllers.js";
 import { auth } from "../middlewares/auth.js";
 
 const router = Router();
@@ -13,7 +18,11 @@ router.delete("/:cart_id", auth, (req, res) => {
 });
 
 router.get("/my-cart", auth, (req, res) => {
-    getMyCartItems(req, res);
-})
+  getMyCartItems(req, res);
+});
+
+router.post("/", auth, (req, res) => {
+  addToCart(req, res);
+});
 
 export default router;

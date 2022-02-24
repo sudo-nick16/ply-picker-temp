@@ -9,13 +9,25 @@ import {
   list,
   ListRelated,
   listBySearch,
-} from "../controllers/product.js";
+  getProduct,
+  allProducts,
+} from "../controllers/productControllers.js";
 
 router.post(
   "/products/create",
   //  requireSignin, isAuth, isAdmin,
   create
 );
+
+router.get("/products", (req, res) => {
+  console.log("all products");
+  allProducts(req, res);
+});
+
+router.get("/products/:p_id", (req, res) => {
+    console.log("one product");
+  getProduct(req, res);
+});
 
 router.get("/products/:productId", (req, res) => {
   res.send(req.product);
@@ -45,6 +57,7 @@ router.put(
   // requireSignin , isAuth , isAdmin ,
   update
 );
+
 router.param("productId", productId);
 
 export default router;

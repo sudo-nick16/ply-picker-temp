@@ -11,6 +11,8 @@ import cartRoutes from "./routes/cartRoutes.js";
 import mongoose from "mongoose";
 import cors from "cors";
 import { MONGODB_URI, ORIGIN, PORT } from "./constants.js";
+import wishlistRouter from "./routes/wishlistRoutes.js";
+import orderRouter from "./routes/orderRoutes.js";
 
 const mongooseOptions = {
   autoIndex: false,
@@ -47,14 +49,16 @@ app.get("/", (_, res) => {
   res.send("Hello boi!");
 });
 
-app.use("/api/", CategoryRouter);
-app.use("/api/", ProductRouter);
-app.use("/api/", SubCategoryRouter);
-app.use("/api/", GroupRouter);
-app.use("/api/carts", cors(corsOptions), cartRoutes);
-app.use("/api/products", cors(corsOptions), productRoutes);
-app.use("/api/auth", cors(corsOptions), authRoutes);
+app.use("/api", cors(corsOptions), CategoryRouter);
+app.use("/api", cors(corsOptions), ProductRouter);
+app.use("/api", cors(corsOptions), SubCategoryRouter);
+app.use("/api", cors(corsOptions), GroupRouter);
 app.use("/api", cors(corsOptions), userRoutes);
+app.use("/api/carts", cors(corsOptions), cartRoutes);
+// app.use("/api/products", cors(corsOptions), productRoutes);
+app.use("/api/auth", cors(corsOptions), authRoutes);
+app.use("/api/wishlist", cors(corsOptions), wishlistRouter);
+app.use("/api/orders", cors(corsOptions), orderRouter);
 
 console.log(`Listening on port ${PORT}`);
 
