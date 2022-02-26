@@ -21,22 +21,44 @@ function CartPage() {
   const [payment, setPayment] = useState("COD");
   const [cartValue, setCartValue] = useState(0);
 
-  const addToCart = async (p_id) => {
-    const res = await api.post(`${API_URL}/carts`, {
-      product_id: p_id,
-    });
-    if (!res.data.error) {
-      // alert("Added to cart");
-      setCart(
-        cart.map((item) => {
-          if (item.product_id._id === p_id) {
-            item.quantity++;
-          }
-          return item;
-        })
-      );
-    } else {
-      alert(res.data.error);
+  const updateCartValue = (cartArr) => {
+    setCartValue(() => cartArr.reduce((total, item) => total + item.product_id.Product_Price * item.quantity, 0));
+  };
+
+  const addToCart = (p_id) => {
+    let outOfStock = false;
+
+    cart.map((cartItem) => {
+      if (cartItem.product_id._id == p_id) {
+        if (cartItem.quantity == cartItem.product_id.Quantity) {
+          alert("Max quantity reached");
+          outOfStock = true
+        }
+      }
+    })
+
+    const postCart = async () => {
+      const res = await api.post(`${API_URL}/carts`, {
+        product_id: p_id,
+      });
+      if (!res.data.error) {
+        // alert("Added to cart");
+        setCart(
+          cart.map((item) => {
+            if (item.product_id._id === p_id) {
+              item.quantity++;
+            }
+            return item;
+          })
+        );
+        updateCartValue(cart)
+      } else {
+        alert(res.data.error);
+      }
+    }
+
+    if (!outOfStock) {
+      postCart()
     }
   };
 
@@ -45,14 +67,14 @@ function CartPage() {
     if (res.data.error) {
       alert(res.data.error);
     } else {
-      setCart(
-        cart.map((item) => {
-          if (item._id === c_id) {
-            item.quantity--;
-          }
-          return item;
-        })
-      );
+      let updatedArr = cart.map((item) => {
+        if (item._id === c_id) {
+          item.quantity--;
+        }
+        return item;
+      })
+      updateCartValue(updatedArr)
+      setCart(updatedArr)
     }
   };
 
@@ -61,7 +83,9 @@ function CartPage() {
     if (res.data.error) {
       alert(res.data.error);
     } else {
-      setCart(cart.filter((item) => item._id !== id));
+      let updatedArr = cart.filter((item) => item._id !== id)
+      setCart(updatedArr);
+      updateCartValue(updatedArr)
     }
   };
 
@@ -84,19 +108,21 @@ function CartPage() {
     }
   };
 
-  useEffect(async () => {
-    const res = await api.get(`${API_URL}/carts/my-cart`);
-    if (res.data.error) {
-      alert(res.data.error);
-    } else {
-      setCart(res.data);
-      setCartValue(() =>
-        res.data.reduce(
-          (total, item) => total + item.product_id.Product_Price,
-          0
-        )
-      );
+  useEffect(() => {
+    const getCart = async () => {
+      const res = await api.get(`${API_URL}/carts/my-cart`);
+      // console.log(res.data)
+      if (res.data.error) {
+        alert(res.data.error);
+      } else {
+        setCart(res.data);
+        updateCartValue(res.data)
+      }
     }
+    getCart()
+    setTimeout(() => {
+      getCart()
+    }, 500)
   }, []);
 
   return (
@@ -164,23 +190,27 @@ function CartPage() {
                 </div>
 
                 <div className="product_product_quantity">
-                  <div className="quantity_counter">
-                    <div
-                      className="product_counter_remove"
-                      type="button"
-                      onClick={() => removeProductFromCart(cartItem._id)}
-                    >
-                      -
+                  <div>
+                    <div className="quantity_counter">
+                      <div
+                        className="product_counter_remove"
+                        type="button"
+                        onClick={() => removeProductFromCart(cartItem._id)}
+                      >
+                        -
+                      </div>
+                      <div className="product_counter_count">
+                        {cartItem.quantity}
+                      </div>
+                      <div
+                        className="product_counter_add"
+                        type="button"
+                        onClick={() => addToCart(product._id)}
+                      >
+                        +
+                      </div>
                     </div>
-                    <div className="product_counter_count">
-                      {cartItem.quantity}
-                    </div>
-                    <div
-                      className="product_counter_add"
-                      type="button"
-                      onClick={() => addToCart(product._id)}
-                    >
-                      +
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Rs. {cartItem.quantity * cartItem.product_id.Product_Price}
                     </div>
                   </div>
                   <div className="product_remove_wishlist">

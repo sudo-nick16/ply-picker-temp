@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { API_URL } from "../../constants";
+import { useStore } from "../../store/store";
 import useAxios from "../../utils/useAxios";
 import StarRating from "../StarRating/StarRating";
 import "./ProductDetails.css";
@@ -64,15 +65,23 @@ const ProductDetails = () => {
   const [groupID, setGroupID] = useState("");
   const [productsWithGroup, setProductsWithGroup] = useState([]);
 
+  const [state] = useStore()
+  const isAuthenticated = state.authenticated
+
   const addToCart = async (p_id, quantity) => {
-    const res = await api.post(`${API_URL}/carts`, {
-      product_id: p_id,
-      quantity,
-    });
-    if (!res.data.error) {
-      alert("Added to cart");
-    } else {
-      alert(res.data.error);
+    if (isAuthenticated){
+      const res = await api.post(`${API_URL}/carts`, {
+        product_id: p_id,
+        quantity,
+      });
+      if (!res.data.error) {
+        // alert("Added to cart");
+      } else {
+        alert(res.data.error);
+      }
+    }
+    else{
+      navigate("/login")
     }
   };
 
