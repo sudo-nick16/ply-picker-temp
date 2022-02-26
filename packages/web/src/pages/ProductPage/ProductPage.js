@@ -6,6 +6,7 @@ import Slider from "@mui/material/Slider";
 import axios from "axios";
 import { Link, useSearchParams } from "react-router-dom";
 import { API_URL } from "../../constants";
+import capitalizeFirstLetter from "../heplerFunctions/capitalizeFirstLetter";
 
 function ProductPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,6 +24,23 @@ function ProductPage() {
 
   let params = {};
 
+  const getGroupData = async (groupID) =>{
+    const groupData = await (await axios.get(`${API_URL}/groups/${groupID}`)).data
+    // console.log(groupData.Group_name)
+    document.title = `Buy ${capitalizeFirstLetter(groupData.Group_name)} at Best Price in India`
+  }
+
+  const getSubcategoryData = async (subcategoryID) =>{
+    const subcategoryData = await (await axios.get(`${API_URL}/subcategories/${subcategoryID}`)).data
+    document.title = `Buy ${capitalizeFirstLetter(subcategoryData.Sub_Category_name)} at Best Price in India`
+  }
+
+  const getCategoryData = async (categoryID) =>{
+    const categoryData = await (await axios.get(`${API_URL}/categories/${categoryID}`)).data
+    document.title = `Buy ${capitalizeFirstLetter(categoryData.name)} at Best Price in India`
+  }
+
+
   if (searchParams.get("name")) {
     NAME_SEARCH_PARAM = searchParams.get("name");
     params.name = NAME_SEARCH_PARAM;
@@ -31,14 +49,17 @@ function ProductPage() {
   if (searchParams.get("category")) {
     CATEGORY_SEARCH_PARAM = searchParams.get("category");
     params.category = CATEGORY_SEARCH_PARAM;
+    getCategoryData(CATEGORY_SEARCH_PARAM)
   }
   if (searchParams.get("subcategory")) {
     SUBCATEGORY_SEARCH_PARAM = searchParams.get("subcategory");
     params.subcategory = SUBCATEGORY_SEARCH_PARAM;
+    getSubcategoryData(SUBCATEGORY_SEARCH_PARAM)
   }
   if (searchParams.get("group")) {
     GROUP_SEARCH_PARAM = searchParams.get("group");
     params.group = GROUP_SEARCH_PARAM;
+    getGroupData(GROUP_SEARCH_PARAM)
   }
 
   var esc = encodeURIComponent;

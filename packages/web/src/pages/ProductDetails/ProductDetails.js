@@ -4,6 +4,7 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { API_URL } from "../../constants";
 import { useStore } from "../../store/store";
 import useAxios from "../../utils/useAxios";
+import capitalizeFirstLetter from "../heplerFunctions/capitalizeFirstLetter";
 import StarRating from "../StarRating/StarRating";
 import "./ProductDetails.css";
 import ProductSuggestion from "./ProductSuggestions/ProductSuggestion";
@@ -95,6 +96,7 @@ const ProductDetails = () => {
       await axios.get(`${API_URL}/products/${productID}`)
     ).data;
     setProduct(data);
+    document.title = `Buy ${capitalizeFirstLetter(data.Product_Name)}`
     setGroupID(data.Group);
   }, []);
 

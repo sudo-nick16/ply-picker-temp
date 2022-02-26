@@ -166,7 +166,7 @@ const MegaMenu = () => {
             <Link
               className="link"
               key={subCat._id}
-              to={`/products?category=${activeCategory}&subcategory=${activeSubCat}`}
+              to={`/products?subcategory=${activeSubCat}`}
               onClick={()=>setShowNavItem(false)}
             >
               <div
@@ -204,7 +204,7 @@ const MegaMenu = () => {
           <Link
             key={props._id}
             className="link"
-            to={`/products?category=${activeCategory}&subcategory=${activeSubCat}&group=${props._id}`}
+            to={`/products?group=${props._id}`}
             onClick={()=>setShowNavItem(false)}
           >
             <div
