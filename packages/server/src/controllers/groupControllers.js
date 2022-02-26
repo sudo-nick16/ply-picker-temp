@@ -13,6 +13,7 @@ export const create = (req, res) => {
 };
 
 export const getGroups = (req, res) => {
+  console.log("getGroups");
   Group.find().exec((err, data) => {
     if (err) {
       return res.status(400).json(err);

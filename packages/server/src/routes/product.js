@@ -9,8 +9,8 @@ import {
   list,
   ListRelated,
   listBySearch,
-  getProduct,
-  allProducts,
+  // getProduct,
+  // allProducts,
 } from "../controllers/productControllers.js";
 
 router.post(
@@ -19,15 +19,15 @@ router.post(
   create
 );
 
-router.get("/products", (req, res) => {
-  console.log("all products");
-  allProducts(req, res);
-});
+// router.get("/products", (req, res) => {
+//   console.log("all products");
+//   allProducts(req, res);
+// });
 
-router.get("/products/:p_id", (req, res) => {
-    console.log("one product");
-  getProduct(req, res);
-});
+// router.get("/products/:p_id", (req, res) => {
+//   console.log("one product");
+//   getProduct(req, res);
+// });
 
 router.get("/products/:productId", (req, res) => {
   res.send(req.product);

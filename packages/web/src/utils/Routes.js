@@ -13,15 +13,19 @@ import Cart from "../pages/Cart/Cart";
 import Wishlist from "../pages/Wishlist/Wishlist";
 import Orders from "../pages/Orders/Orders";
 import Order from "../pages/Order/Order";
+import HomePage from "../pages/HomePage/HomePage";
+import ProductPage from "../pages/ProductPage/ProductPage";
+import ProductDetails from "../pages/ProductDetails/ProductDetails";
+import CartPage from "../pages/CartPage/CartPage";
 
 const AllRoutes = () => {
   return (
     <Router>
       <Routes>
-        <Route
-          path="/"
-          element={<ProtectedRoute redirectTo="/login"></ProtectedRoute>}
-        />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/products" element={<ProductPage />} />
+        {/* <Route path="/product/:p_id" element={<Product />} /> */}
+        <Route path="/productdetails/:id" element={<ProductDetails />} />
         <Route
           path="/me"
           element={
@@ -39,7 +43,7 @@ const AllRoutes = () => {
           }
         />
         <Route
-          path="/order"
+          path="/orders/:order_id"
           element={
             <ProtectedRoute redirectTo="/login">
               <Order />
@@ -66,12 +70,11 @@ const AllRoutes = () => {
           path="/cart"
           element={
             <ProtectedRoute redirectTo="/login">
-              <Cart />
+              <CartPage />
             </ProtectedRoute>
           }
         />
-        <Route path="/products" element={<Products />} />
-        <Route path="/product/:p_id" element={<Product />} />
+        {/* <Route path="/products" element={<Products />} /> */}
         <Route
           exact
           path="/signup"

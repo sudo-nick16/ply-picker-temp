@@ -3,6 +3,7 @@ import {
   addToCart,
   getMyCartItems,
   removeFromCart,
+  removeProductFromCart,
   updateQuantity,
 } from "../controllers/cartControllers.js";
 import { auth } from "../middlewares/auth.js";
@@ -15,6 +16,10 @@ router.patch("/qty", auth, (req, res) => {
 
 router.delete("/:cart_id", auth, (req, res) => {
   removeFromCart(req, res);
+});
+
+router.patch("/:cart_id", auth, (req, res) => {
+  removeProductFromCart(req, res);
 });
 
 router.get("/my-cart", auth, (req, res) => {
