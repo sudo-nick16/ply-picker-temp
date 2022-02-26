@@ -12,6 +12,16 @@ export const create = (req, res) => {
   });
 };
 
+export const getGroupById = (req, res) => {
+  Group.findById(req.params.groupID)
+    .then(group => {
+      if (!group) {
+        return res.status(404).send("The group was not found")
+      }
+      res.send(group)
+    }).catch(err => res.status(500).send(err))
+}
+
 export const getGroups = (req, res) => {
   console.log("getGroups");
   Group.find().exec((err, data) => {

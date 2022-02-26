@@ -2,7 +2,7 @@ import { Router } from "express";
 
 const router = Router();
 
-import { create, getCategories } from "../controllers/categoryControllers.js";
+import { create, getCategories, getCategoryByID } from "../controllers/categoryControllers.js";
 
 router.post(
   "/category/create",
@@ -11,5 +11,7 @@ router.post(
 );
 
 router.get("/categories", getCategories);
+
+router.get("/categories/:categoryID", getCategoryByID)
 
 export default router;

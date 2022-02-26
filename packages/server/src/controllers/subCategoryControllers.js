@@ -12,6 +12,17 @@ export const create = (req, res)=>{
     })
 }
 
+export const getSubcategoryById = (req, res) =>{
+    SubCategory.findById(req.params.subcategoryID)
+    .then(subCategory=>{
+        if (!subCategory){
+            return res.status(400).send("Subcategory does not exist")
+        }
+        res.send(subCategory)
+    })
+    .catch(err=>res.status(500).send(err))
+}
+
 export const getSubCategories = (req, res) =>{
     SubCategory.find().exec((err, data)=>{
         if (err){
