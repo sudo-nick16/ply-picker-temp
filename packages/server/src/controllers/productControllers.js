@@ -167,13 +167,13 @@ export const listBySearch = (req, res) => {
 export const search = (req, res, next) => {};
 
 // only while testing
-export const allProducts = async (req, res) => {
-  const products = await Product.find().exec();
-  console.log("all");
-  res.status(200).json(products);
-};
+// export const allProducts = async (req, res) => {
+//   const products = await Product.find().exec();
+//   console.log("all");
+//   res.status(200).json(products);
+// };
 
-export const getProduct = async (req, res) => {
-  const product = await Product.findById(req.params.p_id).exec();
-  res.status(200).json(product);
-};
+// export const getProduct = async (req, res) => {
+//   const product = await Product.findById(req.params.p_id).exec();
+//   res.status(200).json(product);
+// };

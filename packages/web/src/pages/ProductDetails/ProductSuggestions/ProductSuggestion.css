@@ -1,0 +1,20 @@
+.suggestion_product_main {
+  border: 2px solid #969696;
+  margin-right: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.product_suggestion_pname {
+  font-size: 20px;
+  font-weight: bold;
+  color: #000;
+}
+
+.product_suggestion_pamount {
+  font-size: 15px;
+  color: #969696;
+}

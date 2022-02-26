@@ -16,9 +16,6 @@ function App() {
         `${API_URL}/auth/refresh-token`,
         {},
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
           withCredentials: true,
         }
       );

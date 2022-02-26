@@ -68,14 +68,14 @@ export const verifyMobile = async (req, res) => {
 
   try {
     await twilioClient.messages.create({
-      // messagingServiceSid: "MG9752274e9e519418a7406176694466fa",
+      // messagingServiceSid: "",
       body: `Your OTP is ${otp}`,
       from: TWILIO_NUMBER,
       to: number,
       setTimeout: 10000,
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       msg: "OTP sent.",
     });
   } catch (err) {

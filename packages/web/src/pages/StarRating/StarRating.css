@@ -1,0 +1,12 @@
+.starRating_main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 10px 0;
+  /* justify-content: center; */
+}
+
+.starRating_star {
+  cursor: pointer;
+  transition: color 200ms;
+}

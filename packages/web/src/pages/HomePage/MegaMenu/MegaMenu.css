@@ -1,0 +1,134 @@
+.navbar_main_container_outer {
+  position: relative;
+}
+
+.navbar_wishlist {
+  position: absolute;
+  right: 100px;
+  top: 10px;
+  color: #000;
+}
+
+@media only screen and (max-width: 600px) {
+  .navbar_wishlist {
+    right: 20px;
+  }
+}
+
+.triangle {
+  width: 0px;
+  height: 0px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid #f2f2f2;
+}
+
+.navBarSearchContainer {
+  display: flex;
+  align-items: center;
+}
+
+.navBarContainer {
+  position: relative;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow-x: auto;
+}
+
+.navBarBorder {
+  border-style: solid;
+  border-top-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 0.5px;
+  border-color: #f2f2f2;
+}
+
+.navBarItem {
+  margin-right: 50px;
+  text-align: center;
+  border-style: solid;
+  border-top-width: 0px;
+  border-left-width: 0px;
+  border-right-width: 0px;
+  border-color: #f16512;
+  cursor: pointer;
+}
+
+.subCategoryContainer {
+  display: flex;
+  flex-direction: column;
+  min-width: 30%;
+  background-color: white;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.subCategoryItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  cursor: pointer;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  user-select: none;
+}
+
+.groupContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: #f2f2f2;
+  min-width: 30%;
+  padding: 5px;
+  padding-left: 10px;
+}
+
+.groupItem {
+  cursor: pointer;
+  padding: 5px;
+  user-select: none;
+}
+
+.popularBrandItem {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.popularBrandContainer {
+  background-color: white;
+  padding: 5px;
+  padding-left: 10px;
+}
+
+.popularBrandHeading {
+  padding: 5px;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.popularBrandList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.miniMenu {
+  min-height: 250px;
+  position: absolute;
+  z-index: 999999999999999;
+  box-shadow: 0px 5px 10px 1px rgba(0, 0, 0, 0.39);
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.link:hover {
+  color: inherit;
+}

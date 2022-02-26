@@ -6,16 +6,17 @@ export const updateQuantity = async (req, res) => {
   const cartItem = await CartItem.findOne({
     user_id: req.user._id,
     product_id,
-  })
-    .populate("product_id")
-    .exec();
+  });
+  // .populate("product_id")
+  // .exec();
+
   if (!cartItem) {
     return res.status(404).json({
       error: "Product not found. Could not update quantity.",
     });
   }
   if (quantity === 0) {
-    const item = await CartItem.findByIdAndDelete(cartItem._id).exec();
+    const item = await cartItem.remove();
     console.log(item);
     if (!item) {
       return res.status(409).json({
@@ -61,6 +62,33 @@ export const removeFromCart = async (req, res) => {
   } else {
     return res.status(200).json({
       msg: "Cart item deleted.",
+    });
+  }
+};
+
+export const removeProductFromCart = async (req, res) => {
+  const { cart_id } = req.params;
+  const cartItem = await CartItem.findById(cart_id)
+    .populate("product_id")
+    .exec();
+  console.log(cartItem);
+  if (!cartItem) {
+    return res.status(409).json({
+      error: "Could not remove product from cart item.",
+    });
+  }
+  if (cartItem.quantity - 1 > 0) {
+    cartItem.quantity -= 1;
+  }
+  try {
+    await cartItem.save();
+    return res.status(200).json({
+      msg: "Cart item updated.",
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(409).json({
+      error: "Could not remove product from cart item.",
     });
   }
 };

@@ -33,6 +33,21 @@ const OrderSchema = new mongoose.Schema(
         },
       ],
     },
+    address: {
+      type: {
+        address_line_1: String,
+        address_line_2: String,
+        city: String,
+        state: String,
+        country: String,
+        pincode: String,
+      },
+      required: true,
+    },
+    contact_number: {
+      type: String,
+      required: true,
+    },
     payment: {
       mode: {
         type: String,

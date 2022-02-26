@@ -1,0 +1,124 @@
+.productdetails_maincontainer {
+  display: flex;
+  flex-direction: row;
+  margin: 100px 0;
+}
+
+.productdetails_leftside {
+  display: flex;
+  flex-direction: column;
+  margin-right: 50px;
+}
+
+.productdetail_heading {
+  text-transform: uppercase;
+}
+
+.productdetail_price {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: coral;
+  font-weight: bold;
+}
+
+.mainproduct_image img {
+  height: 500px;
+  width: 500px;
+  object-fit: contain;
+}
+
+.productdetail_product_photos {
+  display: flex;
+  margin-top: 30px;
+}
+
+.productdetail_product_photos img {
+  height: 100px;
+  width: 100px;
+  margin-right: 20px;
+  opacity: 0.7;
+  transition: 0.5s linear;
+}
+
+.productdetail_product_photos img.active {
+  opacity: 1;
+  border: 1px solid orangered;
+}
+
+.productdetails_rightside {
+  display: flex;
+  flex-direction: column;
+}
+
+.productdetail_color {
+  display: flex;
+}
+
+.productdetail_color_color {
+  margin-right: 10px;
+}
+
+.productdetail_color_color img {
+  height: 100px;
+  width: 100px;
+}
+
+.productdetail_code {
+  color: gray;
+  font-size: 15px;
+  margin-top: 5px;
+}
+
+.productdetail_button_container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.productdetail_button_1,
+.productdetail_button_2 {
+  background-color: orange;
+  padding: 10px;
+  font-size: 15px;
+  color: white;
+  font-weight: 500;
+}
+
+.productdetail_button_1 {
+  background-color: chocolate;
+  margin-right: 10px;
+}
+
+@media only screen and (max-width: 576px) {
+  .productdetails_maincontainer {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .productdetails_leftside {
+    margin-bottom: 50px;
+    margin-right: 0;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .productdetails_rightside {
+    align-items: left;
+  }
+
+  .mainproduct_image img {
+    height: 100%;
+    width: 100%;
+  }
+
+  .productdetail_product_photos {
+    justify-content: center;
+  }
+
+  .productdetail_product_photos img {
+    height: 80px;
+    width: 80px;
+  }
+}
