@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
 import { useMediaQuery } from "react-responsive";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import capitalizeFirstLetter from "../../heplerFunctions/capitalizeFirstLetter";
 import SearchComponent from "../Search/SearchComponent";
 import "./MegaMenu.css";
@@ -15,12 +15,17 @@ const MegaMenu = () => {
   let isMobileOrTablet = useMediaQuery({
     query: "(max-width:768px)",
   });
+  const navigate = useNavigate();
   // Performs all network requests for categories, subcategories and grops
   useEffect(() => {
     getCategories();
     getSubCategories();
     getGroups();
   }, []);
+
+  useEffect(()=>{
+    console.log("renders")
+  }, [])
 
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
@@ -135,6 +140,7 @@ const MegaMenu = () => {
             fontWeight: isShowed ? "bold" : "inherit",
           }}
           onMouseOver={mouseOverAction}
+          onClick={()=>console.log("helskdajs")}
         >
           {capitalizeFirstLetter(props.title)}
         </div>
@@ -161,6 +167,7 @@ const MegaMenu = () => {
               className="link"
               key={subCat._id}
               to={`/products?category=${activeCategory}&subcategory=${activeSubCat}`}
+              onClick={()=>setShowNavItem(false)}
             >
               <div
                 key={subCat._id}
@@ -198,6 +205,7 @@ const MegaMenu = () => {
             key={props._id}
             className="link"
             to={`/products?category=${activeCategory}&subcategory=${activeSubCat}&group=${props._id}`}
+            onClick={()=>setShowNavItem(false)}
           >
             <div
               onMouseOver={() => setIsGroupItemVisible(true)}
@@ -345,7 +353,8 @@ const MegaMenu = () => {
         </>
         <div ref={wishlistWrapperRef}>
           <div className="navbar_wishlist" type={"button"}>
-            <FaRegHeart onClick={toggleNavbarWishlist} />
+            <FaRegHeart onClick={()=>setNavbarWishlist(true)} />
+            <Link to={'/cart'}>CART</Link>
           </div>
           <div className="navbar_wishlist navbar_wishlist_close">
             <div
@@ -364,20 +373,22 @@ const MegaMenu = () => {
   };
 
   return (
-    <>
+    <div style={{ marginTop: 10 }}>
       <div className="container navBarSearchContainer">
         <img
           src={logo}
+          onClick={() => navigate("/")}
           style={{
             width: !isMobileOrTablet ? "15%" : "25%",
             marginRight: !isMobileOrTablet ? 20 : 10,
             marginTop: "5px",
+            cursor: "pointer",
           }}
         />
         <SearchComponent />
       </div>
       <NavBar />
-    </>
+    </div>
   );
 };
 

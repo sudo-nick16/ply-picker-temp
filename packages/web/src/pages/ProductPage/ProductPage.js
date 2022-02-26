@@ -12,7 +12,7 @@ function ProductPage() {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [searchParams]);
 
   const [queryS, setQueryS] = useState("");
 
