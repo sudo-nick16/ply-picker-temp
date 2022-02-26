@@ -1,11 +1,40 @@
 .suggestion_product_main {
   border: 2px solid #969696;
-  margin-right: 10px;
-  padding: 10px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.suggestion_container_leftside {
+  flex: 0.6;
+}
+
+.suggestion_container_rightiside {
+  flex: 0.4;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.production_suggestion_pimage {
+  height: 300px;
+  /* width: 230px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.production_suggestion_pimage img {
+  width: 100%;
+  height: 90%;
+  height: auto;
+  max-height: 100%;
+  padding: 10px;
+  object-fit: contain;
+  margin: 0 auto;
 }
 
 .product_suggestion_pname {
@@ -17,4 +46,15 @@
 .product_suggestion_pamount {
   font-size: 15px;
   color: #969696;
+}
+
+.slick-prev {
+  left: 3% !important;
+  z-index: 1;
+  font-size: 14;
+  color: inherit;
+}
+.slick-next {
+  right: 3% !important;
+  z-index: 1;
 }
