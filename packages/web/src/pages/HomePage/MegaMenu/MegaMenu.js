@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
 import { useMediaQuery } from "react-responsive";
 import { Link, useNavigate } from "react-router-dom";
-import capitalizeFirstLetter from "../../heplerFunctions/capitalizeFirstLetter";
+import capitalizeFirstLetter from "../../../helperFunctions/capitalizeFirstLetter"
 import SearchComponent from "../Search/SearchComponent";
 import "./MegaMenu.css";
 import "../Wishlist/Wishlist.css";
