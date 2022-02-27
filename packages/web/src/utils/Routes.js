@@ -33,6 +33,7 @@ const LayoutsWithNavbar = () => (
 const AllRoutes = () => {
   return (
     <Router>
+      {/* <LayoutsWithNavbar /> */}
       <Routes>
         <Route path="/" element={<LayoutsWithNavbar />}>
           <Route path="/" element={<HomePage />} />

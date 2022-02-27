@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../constants";
 import useAxios from "../../utils/useAxios";
+import axios from "axios";
+import "./Orders.scss";
+import OrderCard from "./OrderCard";
 
 const Orders = () => {
   const navigate = useNavigate();
@@ -17,22 +20,20 @@ const Orders = () => {
     }
   }, []);
   return (
-    <>
-      <div>Orders</div>
-      {orders.map((order) => {
-        return (
-          <div key={order._id}>
-            <button onClick={() => navigate(`/orders/${order._id}`)}>
-              {order._id}
-            </button>
-            <h4>Total Items: {order.order_items.length}</h4>
-            <h5>Amount: {order.total}</h5>
-            <h5>Payment Status: {order.payment.status}</h5>
-            <h5>Payment Mode: {order.payment.mode}</h5>
-          </div>
-        );
-      })}
-    </>
+    <div className="orders-container">
+      {!orders.length ? (
+        <div className="order-container no-orders">
+          <img
+            src="https://ii1.pepperfry.com/images/empty-cart-icon.png"
+            alt=""
+          />
+          <span>You have no placed any order yet.</span>
+          <span>You order details will appear here once you do.</span>
+        </div>
+      ) : (
+        orders.map((order) => <OrderCard key={order._id} order={order} />)
+      )}
+    </div>
   );
 };
 

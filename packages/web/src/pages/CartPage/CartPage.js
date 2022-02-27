@@ -11,18 +11,26 @@ import {
 import { RiCoupon2Line } from "react-icons/ri";
 import useAxios from "../../utils/useAxios";
 import { API_URL } from "../../constants";
+import { useNavigate } from "react-router-dom";
 
 function CartPage() {
   const api = useAxios();
   const [count, setCount] = useState(1);
   const [cart, setCart] = useState([]);
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState({});
   const [phone, setPhone] = useState("");
   const [payment, setPayment] = useState("COD");
   const [cartValue, setCartValue] = useState(0);
 
+  const navigate = useNavigate();
+
   const updateCartValue = (cartArr) => {
-    setCartValue(() => cartArr.reduce((total, item) => total + item.product_id.Product_Price * item.quantity, 0));
+    setCartValue(() =>
+      cartArr.reduce(
+        (total, item) => total + item.product_id.Product_Price * item.quantity,
+        0
+      )
+    );
   };
 
   const addToCart = (p_id) => {
@@ -32,10 +40,10 @@ function CartPage() {
       if (cartItem.product_id._id == p_id) {
         if (cartItem.quantity == cartItem.product_id.Quantity) {
           alert("Max quantity reached");
-          outOfStock = true
+          outOfStock = true;
         }
       }
-    })
+    });
 
     const postCart = async () => {
       const res = await api.post(`${API_URL}/carts`, {
@@ -51,14 +59,14 @@ function CartPage() {
             return item;
           })
         );
-        updateCartValue(cart)
+        updateCartValue(cart);
       } else {
         alert(res.data.error);
       }
-    }
+    };
 
     if (!outOfStock) {
-      postCart()
+      postCart();
     }
   };
 
@@ -72,9 +80,9 @@ function CartPage() {
           item.quantity--;
         }
         return item;
-      })
-      updateCartValue(updatedArr)
-      setCart(updatedArr)
+      });
+      updateCartValue(updatedArr);
+      setCart(updatedArr);
     }
   };
 
@@ -83,9 +91,9 @@ function CartPage() {
     if (res.data.error) {
       alert(res.data.error);
     } else {
-      let updatedArr = cart.filter((item) => item._id !== id)
+      let updatedArr = cart.filter((item) => item._id !== id);
       setCart(updatedArr);
-      updateCartValue(updatedArr)
+      updateCartValue(updatedArr);
     }
   };
 
@@ -108,6 +116,23 @@ function CartPage() {
     }
   };
 
+  const createOrder = async () => {
+    console.log(address, "\nphone", phone, "\npayment", payment);
+    // return;
+    const res = await api.post(`${API_URL}/orders`, {
+      address,
+      phone,
+      payment_mode: payment,
+    });
+    if (!res.data.error && res.data.order_id) {
+      alert("Order Placed Successfully");
+      setCart([]);
+      navigate(`/orders/${res.data.order_id}`);
+    } else {
+      alert(res.data.error);
+    }
+  };
+
   useEffect(() => {
     const getCart = async () => {
       const res = await api.get(`${API_URL}/carts/my-cart`);
@@ -116,13 +141,13 @@ function CartPage() {
         alert(res.data.error);
       } else {
         setCart(res.data);
-        updateCartValue(res.data)
+        updateCartValue(res.data);
       }
-    }
-    getCart()
+    };
+    getCart();
     setTimeout(() => {
-      getCart()
-    }, 500)
+      getCart();
+    }, 500);
   }, []);
 
   return (
@@ -210,7 +235,15 @@ function CartPage() {
                         +
                       </div>
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>Rs. {cartItem.quantity * cartItem.product_id.Product_Price}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      Rs.{" "}
+                      {cartItem.quantity * cartItem.product_id.Product_Price}
                     </div>
                   </div>
                   <div className="product_remove_wishlist">
@@ -262,7 +295,11 @@ function CartPage() {
               </div>
             </div>
           </div>
-          <div className="pricing_side_placeorder_button" type="button">
+          <div
+            className="pricing_side_placeorder_button"
+            type="button"
+            onClick={createOrder}
+          >
             Place Order
           </div>
         </div>

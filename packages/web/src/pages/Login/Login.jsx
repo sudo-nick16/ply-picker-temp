@@ -25,6 +25,7 @@ const Login = () => {
       emailOrMobile,
       password,
     };
+    console.log(data);
     const response = await axios.post(API_URL + "/auth/login", data, {
       headers: {
         "Content-Type": "application/json",
