@@ -66,11 +66,11 @@ const ProductDetails = () => {
   const [groupID, setGroupID] = useState("");
   const [productsWithGroup, setProductsWithGroup] = useState([]);
 
-  const [state] = useStore()
-  const isAuthenticated = state.authenticated
+  const [state] = useStore();
+  const isAuthenticated = state.authenticated;
 
   const addToCart = async (p_id, quantity) => {
-    if (isAuthenticated){
+    if (isAuthenticated) {
       const res = await api.post(`${API_URL}/carts`, {
         product_id: p_id,
         quantity,
@@ -80,9 +80,8 @@ const ProductDetails = () => {
       } else {
         alert(res.data.error);
       }
-    }
-    else{
-      navigate("/login")
+    } else {
+      navigate("/login");
     }
   };
 
@@ -115,7 +114,7 @@ const ProductDetails = () => {
       await axios.get(`${API_URL}/products/${productID}`)
     ).data;
     setProduct(data);
-    document.title = `Buy ${capitalizeFirstLetter(data.Product_Name)}`
+    document.title = `Buy ${capitalizeFirstLetter(data.Product_Name)}`;
     setGroupID(data.Group);
   }, []);
 
@@ -158,6 +157,11 @@ const ProductDetails = () => {
             <div className="productdetail_heading">
               <h2>{product.Product_Name}</h2>
             </div>
+            <div className="productdetail_brand">
+              <h2>
+                by: <span>Product Brand Name</span>
+              </h2>
+            </div>
             <div className="productdetail_rating">
               <StarRating />
             </div>
@@ -194,9 +198,7 @@ const ProductDetails = () => {
               >
                 Buy Now
               </div>
-              <div onClick={()=>{}}>
-                Add to wishlist
-              </div>
+              <div className="productdetail_button_3">Add to Wishlist</div>
             </div>
           </div>
         </div>
