@@ -65,13 +65,13 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-UserSchema.pre("save", async function (next) {
+// UserSchema.pre("save", async function (next) {
   // this.password = await argon2.hash(this.password);
-  const salt = await bcryptjs.genSalt(10);
-  const hashedPassword = await bcryptjs.hash(this.password, salt);
-  this.password = hashedPassword;
-  next();
-});
+//   const salt = await bcryptjs.genSalt(10);
+//   const hashedPassword = await bcryptjs.hash(this.password, salt);
+//   this.password = hashedPassword;
+//   next();
+// });
 
 const User = mongoose.model("User", UserSchema);
 

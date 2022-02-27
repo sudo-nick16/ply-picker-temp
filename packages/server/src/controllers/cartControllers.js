@@ -77,11 +77,13 @@ export const removeProductFromCart = async (req, res) => {
       error: "Could not remove product from cart item.",
     });
   }
-  if (cartItem.quantity - 1 > 0) {
-    cartItem.quantity -= 1;
-  }
   try {
-    await cartItem.save();
+    if (cartItem.quantity - 1 > 0) {
+      cartItem.quantity -= 1;
+      await cartItem.save();
+    } else if (cartItem.quantity - 1 === 0) {
+      await cartItem.remove();
+    }
     return res.status(200).json({
       msg: "Cart item updated.",
     });
