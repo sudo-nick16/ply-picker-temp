@@ -15,6 +15,16 @@
   text-transform: uppercase;
 }
 
+.productdetail_brand h2 {
+  font-size: 0.8rem;
+  color: orangered;
+}
+
+.productdetail_brand h2 span {
+  text-decoration: underline;
+  font-weight: 700;
+}
+
 .productdetail_price {
   margin-top: 10px;
   margin-bottom: 10px;
@@ -86,7 +96,8 @@
 }
 
 .productdetail_button_1,
-.productdetail_button_2 {
+.productdetail_button_2,
+.productdetail_button_3 {
   background-color: orange;
   padding: 10px;
   font-size: 15px;
@@ -105,6 +116,11 @@
 .productdetail_button_1 {
   background-color: chocolate;
   margin-right: 10px;
+}
+
+.productdetail_button_3 {
+  margin-left: 10px;
+  background-color: orangered;
 }
 
 @media only screen and (max-width: 992px) {

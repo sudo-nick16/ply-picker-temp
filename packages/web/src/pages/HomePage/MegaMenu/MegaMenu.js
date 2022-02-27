@@ -10,6 +10,7 @@ import { FaRegHeart } from "react-icons/fa";
 import Wishlist from "../Wishlist/Wishlist";
 import logo from "../../images/logo.png";
 import { API_URL } from "../../../constants";
+import { AiOutlineShoppingCart } from "react-icons/ai";
 
 const MegaMenu = () => {
   let isMobileOrTablet = useMediaQuery({
@@ -23,9 +24,9 @@ const MegaMenu = () => {
     getGroups();
   }, []);
 
-  useEffect(()=>{
-    console.log("renders")
-  }, [])
+  useEffect(() => {
+    console.log("renders");
+  }, []);
 
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
@@ -140,7 +141,7 @@ const MegaMenu = () => {
             fontWeight: isShowed ? "bold" : "inherit",
           }}
           onMouseOver={mouseOverAction}
-          onClick={()=>console.log("helskdajs")}
+          onClick={() => console.log("helskdajs")}
         >
           {capitalizeFirstLetter(props.title)}
         </div>
@@ -167,7 +168,7 @@ const MegaMenu = () => {
               className="link"
               key={subCat._id}
               to={`/products?subcategory=${activeSubCat}`}
-              onClick={()=>setShowNavItem(false)}
+              onClick={() => setShowNavItem(false)}
             >
               <div
                 key={subCat._id}
@@ -205,7 +206,7 @@ const MegaMenu = () => {
             key={props._id}
             className="link"
             to={`/products?group=${props._id}`}
-            onClick={()=>setShowNavItem(false)}
+            onClick={() => setShowNavItem(false)}
           >
             <div
               onMouseOver={() => setIsGroupItemVisible(true)}
@@ -353,8 +354,12 @@ const MegaMenu = () => {
         </>
         <div ref={wishlistWrapperRef}>
           <div className="navbar_wishlist" type={"button"}>
-            <FaRegHeart onClick={()=>setNavbarWishlist(true)} />
-            <Link to={'/cart'}>CART</Link>
+            <FaRegHeart onClick={() => setNavbarWishlist(true)} />
+            <Link to={"/cart"}>
+              <AiOutlineShoppingCart
+                style={{ color: "#000", marginLeft: "5px" }}
+              />
+            </Link>
           </div>
           <div className="navbar_wishlist navbar_wishlist_close">
             <div
