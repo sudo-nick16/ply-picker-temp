@@ -5,6 +5,7 @@ export const MONGODB_URI = process.env.MONGODB_URI;
 export const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 export const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 export const _env_ = process.env.NODE_ENV;
+export const DELIVERY = process.env.DELIVERY;
 export const COOKIE_NAME = process.env.COOKIE_NAME;
 export const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
 export const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;

@@ -5,6 +5,7 @@ import validator from "validator";
 import User from "../models/User.js";
 import Mobile from "../models/Mobile.js";
 import { setCookies } from "../utils/setCookies.js";
+import { hashPassword } from "../utils/hashPassword.js";
 import nodemailer from "nodemailer";
 import {
   COOKIE_NAME,
@@ -68,7 +69,7 @@ export const verifyMobile = async (req, res) => {
 
   try {
     await twilioClient.messages.create({
-      // messagingServiceSid: "",
+      // messagingServiceSid: "", in prod
       body: `Your OTP is ${otp}`,
       from: TWILIO_NUMBER,
       to: number,
@@ -132,7 +133,7 @@ export const register = async (req, res) => {
     const newUser = new User({
       name,
       email,
-      password,
+      password: await hashPassword(password),
       mobile_number: number,
       mobile_verified: true,
     });
@@ -179,7 +180,7 @@ export const login = async (req, res) => {
   }
 
   const isAuth = await bcryptjs.compare(password, user.password);
-  console.log(isAuth);
+  console.log(isAuth, "auth password", password, user.password);
   if (!isAuth) {
     console.log("password not matched");
     return res.status(400).json({

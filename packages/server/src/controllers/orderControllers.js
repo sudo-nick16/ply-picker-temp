@@ -4,6 +4,7 @@ import User from "../models/User.js";
 import validator from "validator";
 import twilio from "twilio";
 import {
+  DELIVERY,
   TWILIO_ACCOUNT_SID,
   TWILIO_AUTH_TOKEN,
   TWILIO_NUMBER,
@@ -19,7 +20,9 @@ export const createOrder = async (req, res) => {
 
   const { address, phone, payment_mode } = req.body;
 
-  const contact_number = `+91${phone}`;
+  const contact_number = phone? `+91${phone}` : user.mobile_number;
+
+  console.log(contact_number);
 
   if (!validator.isMobilePhone(contact_number, "en-IN")) {
     return res.status(400).json({
@@ -60,22 +63,22 @@ export const createOrder = async (req, res) => {
       user_id: _id,
       order_items,
       total,
-      address,
-      contact_number,
+      address: address || user.address[0] || {},
+      contact_number: contact_number || user.mobile_number,
     });
 
     // send a message to the delivery guy
     try {
       await twilioClient.messages.create({
-        // messagingServiceSid: "MG9752274e9e519418a7406176694466fa",
-        body: `New Order Placed by ${user.name}\nOrder Id: ${order._id}} \nURL: http://localhost:3000/orders/${order._id}`,
+        // messagingServiceSid: "MG9752274e9e519418a7406176694466fa", in prod
+        body: `New Order Placed by ${user.name}\nOrder Id: ${order._id}} \nURL: http://localhost:3000/delivery/orders/${order._id}`,
         from: TWILIO_NUMBER,
-        to: "+916363721424",
+        to: DELIVERY,
         setTimeout: 10000,
       });
     } catch (err) {
       console.log(err);
-      throw new Error("Couldn't send the OTP, Please try again!");
+      throw new Error("Couldn't send the order details, Please try again!");
     }
 
     await order.save();
