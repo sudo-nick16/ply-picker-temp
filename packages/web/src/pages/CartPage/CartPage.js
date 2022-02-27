@@ -21,6 +21,10 @@ function CartPage() {
   const [payment, setPayment] = useState("COD");
   const [cartValue, setCartValue] = useState(0);
 
+  useEffect(() => {
+    document.title = "Checkout";
+  }, [])
+  
   const updateCartValue = (cartArr) => {
     setCartValue(() => cartArr.reduce((total, item) => total + item.product_id.Product_Price * item.quantity, 0));
   };
