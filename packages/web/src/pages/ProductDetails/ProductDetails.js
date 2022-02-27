@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { API_URL } from "../../constants";
 import { useStore } from "../../store/store";
 import useAxios from "../../utils/useAxios";
@@ -76,7 +76,7 @@ const ProductDetails = () => {
         quantity,
       });
       if (!res.data.error) {
-        // alert("Added to cart");
+        alert("Added to cart");
       } else {
         alert(res.data.error);
       }
@@ -90,7 +90,7 @@ const ProductDetails = () => {
     navigate("/cart");
   };
 
-  const addToWishlist = async (p_id, c_id) => {
+  const addToWishlist = async (p_id) => {
     try {
       const res = await api.post(`${API_URL}/wishlist`, {
         p_id,
@@ -98,14 +98,10 @@ const ProductDetails = () => {
       if (!res.data) {
         throw new Error("Could not add to wishlist");
       }
-      const resp = await api.delete(`${API_URL}/carts/${c_id}`);
-      if (resp.data.error) {
-        alert(resp.data.error);
-      } else {
-        alert("Added to wishlist and removed from cart");
-      }
+      alert("added to wishlist")
     } catch (err) {
       console.log(err);
+      alert(err.response.data.error)
     }
   };
 
@@ -198,7 +194,7 @@ const ProductDetails = () => {
               >
                 Buy Now
               </div>
-              <div className="productdetail_button_3">Add to Wishlist</div>
+              <div className="productdetail_button_3" onClick={() => addToWishlist(productID)}>Add to Wishlist</div>
             </div>
           </div>
         </div>

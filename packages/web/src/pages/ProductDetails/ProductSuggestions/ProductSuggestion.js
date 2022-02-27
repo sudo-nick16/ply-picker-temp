@@ -88,8 +88,8 @@ function ProductSuggestion(props) {
       <div className="product_suggestion_container">
         <h2>You might also like</h2>
         <Slider {...settings}>
-          {props.data.splice(0, 10).map((item) => (
-            <Item
+          {props.data.splice(0, 10).map((item, i) => (
+            <Item key={i}
               name={item.Product_Name}
               price={item.Product_Price}
               image={item.Product_Image}
