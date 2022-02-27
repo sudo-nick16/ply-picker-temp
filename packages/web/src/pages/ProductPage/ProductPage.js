@@ -6,7 +6,7 @@ import Slider from "@mui/material/Slider";
 import axios from "axios";
 import { Link, useSearchParams } from "react-router-dom";
 import { API_URL } from "../../constants";
-import capitalizeFirstLetter from "../heplerFunctions/capitalizeFirstLetter";
+import capitalizeFirstLetter from "../../helperFunctions/capitalizeFirstLetter";
 
 function ProductPage() {
   const [searchParams, setSearchParams] = useSearchParams();
