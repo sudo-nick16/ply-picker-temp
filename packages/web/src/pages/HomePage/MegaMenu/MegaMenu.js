@@ -33,6 +33,8 @@ const MegaMenu = () => {
   const [groups, setGroups] = useState([]);
   const [brands, setBrands] = useState([]);
 
+  const [navbarWishlist, setNavbarWishlist] = useState(false);
+
   // Controls the visibility of the categories menu
   // By default, the menu is not shown
   const [showNavItem, setShowNavItem] = useState(false);
@@ -311,8 +313,6 @@ const MegaMenu = () => {
     const wishlistWrapperRef = useRef(null);
     useOutsideAlerterWishlist(wishlistWrapperRef);
 
-    const [navbarWishlist, setNavbarWishlist] = useState(false);
-
     const toggleNavbarWishlist = () => setNavbarWishlist(!navbarWishlist);
 
     useEffect(() => {
@@ -353,14 +353,6 @@ const MegaMenu = () => {
           </div>
         </>
         <div ref={wishlistWrapperRef}>
-          <div className="navbar_wishlist" type={"button"}>
-            <FaRegHeart onClick={() => setNavbarWishlist(true)} />
-            <Link to={"/cart"}>
-              <AiOutlineShoppingCart
-                style={{ color: "#000", marginLeft: "5px" }}
-              />
-            </Link>
-          </div>
           <div className="navbar_wishlist navbar_wishlist_close">
             <div
               className={
@@ -391,6 +383,8 @@ const MegaMenu = () => {
           }}
         />
         <SearchComponent />
+        <AiOutlineShoppingCart onClick={() => navigate('/cart')} className="navBarButtons cartButton" size={22} />
+        <FaRegHeart className="navBarButtons" size={22} onClick={() => setNavbarWishlist(true)} />
       </div>
       <NavBar />
     </div>

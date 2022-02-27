@@ -64,7 +64,7 @@ const SearchComponent = () => {
   };
 
   return (
-    <div style={{ width: "75%" }}>
+    <div style={{ flexGrow:1 }}>
       <input
         className="searchbar_search"
         placeholder="What are you looking for?"
