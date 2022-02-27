@@ -1,8 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { API_URL } from "../../constants";
+import { useStore } from "../../store/store";
 import useAxios from "../../utils/useAxios";
+import capitalizeFirstLetter from "../../helperFunctions/capitalizeFirstLetter";
 import StarRating from "../StarRating/StarRating";
 import "./ProductDetails.css";
 import ProductSuggestion from "./ProductSuggestions/ProductSuggestion";
@@ -64,15 +66,22 @@ const ProductDetails = () => {
   const [groupID, setGroupID] = useState("");
   const [productsWithGroup, setProductsWithGroup] = useState([]);
 
+  const [state] = useStore();
+  const isAuthenticated = state.authenticated;
+
   const addToCart = async (p_id, quantity) => {
-    const res = await api.post(`${API_URL}/carts`, {
-      product_id: p_id,
-      quantity,
-    });
-    if (!res.data.error) {
-      alert("Added to cart");
+    if (isAuthenticated) {
+      const res = await api.post(`${API_URL}/carts`, {
+        product_id: p_id,
+        quantity,
+      });
+      if (!res.data.error) {
+        alert("Added to cart");
+      } else {
+        alert(res.data.error);
+      }
     } else {
-      alert(res.data.error);
+      navigate("/login");
     }
   };
 
@@ -81,11 +90,27 @@ const ProductDetails = () => {
     navigate("/cart");
   };
 
+  const addToWishlist = async (p_id) => {
+    try {
+      const res = await api.post(`${API_URL}/wishlist`, {
+        p_id,
+      });
+      if (!res.data) {
+        throw new Error("Could not add to wishlist");
+      }
+      alert("added to wishlist")
+    } catch (err) {
+      console.log(err);
+      alert(err.response.data.error)
+    }
+  };
+
   useEffect(async () => {
     const data = await (
       await axios.get(`${API_URL}/products/${productID}`)
     ).data;
     setProduct(data);
+    document.title = `Buy ${capitalizeFirstLetter(data.Product_Name)}`;
     setGroupID(data.Group);
   }, []);
 
@@ -128,6 +153,11 @@ const ProductDetails = () => {
             <div className="productdetail_heading">
               <h2>{product.Product_Name}</h2>
             </div>
+            <div className="productdetail_brand">
+              <h2>
+                by: <span>{capitalizeFirstLetter(`${product.Brand}`)}</span>
+              </h2>
+            </div>
             <div className="productdetail_rating">
               <StarRating />
             </div>
@@ -164,6 +194,7 @@ const ProductDetails = () => {
               >
                 Buy Now
               </div>
+              <div className="productdetail_button_3" onClick={() => addToWishlist(productID)}>Add to Wishlist</div>
             </div>
           </div>
         </div>

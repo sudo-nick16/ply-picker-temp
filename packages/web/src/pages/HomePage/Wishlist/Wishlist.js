@@ -56,9 +56,9 @@ function Wishlist(props) {
         <div>My Wishlist</div>
         <AiOutlineClose onClick={props.onClose} style={{ cursor: "pointer" }} />
       </div>
-      {wishlist.map((item) => {
+      {wishlist.map((item, i) => {
         return (
-          <div className="wishlist_product_container">
+          <div className="wishlist_product_container" key={i}>
             <div className="wishlist_product_info">
               <div className="wishlist_product_image">
                 <img width={100} height={100} src={item.Product_Image} alt="" />

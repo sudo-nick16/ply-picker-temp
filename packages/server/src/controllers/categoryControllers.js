@@ -12,6 +12,16 @@ export const create = (req, res) => {
     });
 };
 
+export const getCategoryByID = (req, res) =>{
+    Category.findById(req.params.categoryID)
+    .then(category=>{
+        if (!category){
+            return res.status(400).send("Category does not exists")
+        }
+        res.send(category)
+    })
+    .catch(err=>res.status(500).send(err))
+}
 
 export const getCategories = (req,res) => {
     Category.find().exec((err , data) => {

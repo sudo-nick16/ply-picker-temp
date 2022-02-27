@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+} from "react-router-dom";
 import EditProfile from "../pages/EditProfile/EditProfile";
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
 import Login from "../pages/Login/Login";
@@ -17,15 +22,24 @@ import HomePage from "../pages/HomePage/HomePage";
 import ProductPage from "../pages/ProductPage/ProductPage";
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 import CartPage from "../pages/CartPage/CartPage";
+import MegaMenu from "../pages/HomePage/MegaMenu/MegaMenu";
 
+const LayoutsWithNavbar = () => (
+  <>
+    <MegaMenu />
+    <Outlet />
+  </>
+);
 const AllRoutes = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/products" element={<ProductPage />} />
+        <Route path="/" element={<LayoutsWithNavbar />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/products" element={<ProductPage />} />
+          <Route path="/productdetails/:id" element={<ProductDetails />} />
+        </Route>
         {/* <Route path="/product/:p_id" element={<Product />} /> */}
-        <Route path="/productdetails/:id" element={<ProductDetails />} />
         <Route
           path="/me"
           element={

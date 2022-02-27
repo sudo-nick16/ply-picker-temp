@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
 import { useMediaQuery } from "react-responsive";
-import { Link } from "react-router-dom";
-import capitalizeFirstLetter from "../../heplerFunctions/capitalizeFirstLetter";
+import { Link, useNavigate } from "react-router-dom";
+import capitalizeFirstLetter from "../../../helperFunctions/capitalizeFirstLetter"
 import SearchComponent from "../Search/SearchComponent";
 import "./MegaMenu.css";
 import "../Wishlist/Wishlist.css";
@@ -10,11 +10,13 @@ import { FaRegHeart } from "react-icons/fa";
 import Wishlist from "../Wishlist/Wishlist";
 import logo from "../../images/logo.png";
 import { API_URL } from "../../../constants";
+import { AiOutlineShoppingCart } from "react-icons/ai";
 
 const MegaMenu = () => {
   let isMobileOrTablet = useMediaQuery({
     query: "(max-width:768px)",
   });
+  const navigate = useNavigate();
   // Performs all network requests for categories, subcategories and grops
   useEffect(() => {
     getCategories();
@@ -22,10 +24,16 @@ const MegaMenu = () => {
     getGroups();
   }, []);
 
+  useEffect(() => {
+    console.log("renders");
+  }, []);
+
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [groups, setGroups] = useState([]);
   const [brands, setBrands] = useState([]);
+
+  const [navbarWishlist, setNavbarWishlist] = useState(false);
 
   // Controls the visibility of the categories menu
   // By default, the menu is not shown
@@ -135,6 +143,7 @@ const MegaMenu = () => {
             fontWeight: isShowed ? "bold" : "inherit",
           }}
           onMouseOver={mouseOverAction}
+          onClick={() => console.log("helskdajs")}
         >
           {capitalizeFirstLetter(props.title)}
         </div>
@@ -160,7 +169,8 @@ const MegaMenu = () => {
             <Link
               className="link"
               key={subCat._id}
-              to={`/products?category=${activeCategory}&subcategory=${activeSubCat}`}
+              to={`/products?subcategory=${activeSubCat}`}
+              onClick={() => setShowNavItem(false)}
             >
               <div
                 key={subCat._id}
@@ -197,7 +207,8 @@ const MegaMenu = () => {
           <Link
             key={props._id}
             className="link"
-            to={`/products?category=${activeCategory}&subcategory=${activeSubCat}&group=${props._id}`}
+            to={`/products?group=${props._id}`}
+            onClick={() => setShowNavItem(false)}
           >
             <div
               onMouseOver={() => setIsGroupItemVisible(true)}
@@ -302,8 +313,6 @@ const MegaMenu = () => {
     const wishlistWrapperRef = useRef(null);
     useOutsideAlerterWishlist(wishlistWrapperRef);
 
-    const [navbarWishlist, setNavbarWishlist] = useState(false);
-
     const toggleNavbarWishlist = () => setNavbarWishlist(!navbarWishlist);
 
     useEffect(() => {
@@ -344,9 +353,6 @@ const MegaMenu = () => {
           </div>
         </>
         <div ref={wishlistWrapperRef}>
-          <div className="navbar_wishlist" type={"button"}>
-            <FaRegHeart onClick={toggleNavbarWishlist} />
-          </div>
           <div className="navbar_wishlist navbar_wishlist_close">
             <div
               className={
@@ -364,20 +370,24 @@ const MegaMenu = () => {
   };
 
   return (
-    <>
+    <div style={{ marginTop: 10 }}>
       <div className="container navBarSearchContainer">
         <img
           src={logo}
+          onClick={() => navigate("/")}
           style={{
             width: !isMobileOrTablet ? "15%" : "25%",
             marginRight: !isMobileOrTablet ? 20 : 10,
             marginTop: "5px",
+            cursor: "pointer",
           }}
         />
         <SearchComponent />
+        <AiOutlineShoppingCart onClick={() => navigate('/cart')} className="navBarButtons cartButton" size={22} />
+        <FaRegHeart className="navBarButtons" size={22} onClick={() => setNavbarWishlist(true)} />
       </div>
       <NavBar />
-    </>
+    </div>
   );
 };
 

@@ -4,20 +4,45 @@ import "./ProductSuggestion.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", background: "#696969" }}
+      onClick={onClick}
+    />
+  );
+}
+
+function SamplePrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", background: "#696969" }}
+      onClick={onClick}
+    />
+  );
+}
+
 function ProductSuggestion(props) {
   var settings = {
     dots: true,
+    arrows: true,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
     infinite: false,
     speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 4,
+    slidesToShow: 2.5,
+    slidesToScroll: 2,
     initialSlide: 0,
     responsive: [
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
-          slidesToScroll: 3,
+          slidesToShow: 2,
+          slidesToScroll: 2,
           infinite: true,
           dots: true,
         },
@@ -25,8 +50,8 @@ function ProductSuggestion(props) {
       {
         breakpoint: 600,
         settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
+          slidesToShow: 1.5,
+          slidesToScroll: 1,
           initialSlide: 2,
         },
       },
@@ -41,41 +66,36 @@ function ProductSuggestion(props) {
   };
 
   const Item = (props) => (
-    <div
-      className="suggestion_product_main"
-      // className="product_suggestion_product_container"
-      // style={{ backgroundColor: "red" }}
-    >
-      <div
-        // className="production_suggestion_pimage"
-        style={{
-          height: "100%",
-          width: "100%",
-        }}
-      >
-        <img
-          src={props.image}
-          // src="https://www.cera-india.com/wp-content/uploads/2020/09/F9025102.jpeg"
-          alt=""
-          style={{
-            objectFit: "contain",
-            width: "100%",
-          }}
-        />
+    <div className="suggestion_product_main">
+      <div className="suggestion_container_leftside">
+        <div className="production_suggestion_pimage">
+          <img src={props.image} alt="" />
+        </div>
       </div>
-      <div className="product_suggestion_pname">{props.name}</div>
-      <div className="product_suggestion_pamount">{props.price}</div>
+      <div className="suggestion_container_rightiside">
+        <div
+          className="product_suggestion_pname text-truncate"
+          style={{ maxWidth: "150px" }}
+        >
+          {props.name}
+        </div>
+        <div className="product_suggestion_pamount">{props.price}</div>
+      </div>
     </div>
   );
   return (
-    <div className="container">
+    <div className="container" style={{ width: "100%" }}>
       <div className="product_suggestion_container">
-        <div>
-          <h2>You might also like</h2>
-          <Slider {...settings}>
-            {props.data.splice(0,10).map(item=><Item name={item.Product_Name} price={item.Product_Price} image={item.Product_Image}/>)}
-          </Slider>
-        </div>
+        <h2>You might also like</h2>
+        <Slider {...settings}>
+          {props.data.splice(0, 10).map((item, i) => (
+            <Item key={i}
+              name={item.Product_Name}
+              price={item.Product_Price}
+              image={item.Product_Image}
+            />
+          ))}
+        </Slider>
       </div>
     </div>
   );
