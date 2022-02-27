@@ -159,7 +159,7 @@ const ProductDetails = () => {
             </div>
             <div className="productdetail_brand">
               <h2>
-                by: <span>Product Brand Name</span>
+                by: <span>{capitalizeFirstLetter(`${product.Brand}`)}</span>
               </h2>
             </div>
             <div className="productdetail_rating">
