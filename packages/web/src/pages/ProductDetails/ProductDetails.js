@@ -4,7 +4,7 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { API_URL } from "../../constants";
 import { useStore } from "../../store/store";
 import useAxios from "../../utils/useAxios";
-import capitalizeFirstLetter from "../heplerFunctions/capitalizeFirstLetter";
+import capitalizeFirstLetter from "../../helperFunctions/capitalizeFirstLetter";
 import StarRating from "../StarRating/StarRating";
 import "./ProductDetails.css";
 import ProductSuggestion from "./ProductSuggestions/ProductSuggestion";
@@ -88,6 +88,25 @@ const ProductDetails = () => {
   const buyNowHandler = (p_id) => {
     addToCart(p_id, 1);
     navigate("/cart");
+  };
+
+  const addToWishlist = async (p_id, c_id) => {
+    try {
+      const res = await api.post(`${API_URL}/wishlist`, {
+        p_id,
+      });
+      if (!res.data) {
+        throw new Error("Could not add to wishlist");
+      }
+      const resp = await api.delete(`${API_URL}/carts/${c_id}`);
+      if (resp.data.error) {
+        alert(resp.data.error);
+      } else {
+        alert("Added to wishlist and removed from cart");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(async () => {
