@@ -127,19 +127,33 @@ function CartPage() {
   };
 
   useEffect(() => {
-    const getCart = async () => {
-      const res = await api.get(`${API_URL}/carts/my-cart`);
-      // console.log(res.data)
-      if (res.data.error) {
-        alert(res.data.error);
-      } else {
-        setCart(res.data);
+    let isMounted = true
+    api.get(`${API_URL}/carts/my-cart`).then(res => {
+      console.log(res.data)
+      if (isMounted) {
+        setCart(res.data)
       }
-    }
-    getCart()
-    setTimeout(() => {
-      getCart()
-    }, 500)
+    })
+    .catch(err=>console.error(err))
+    // if (res.data.error){
+    //   alert(res.data.error)
+    // }else{
+    //   if(!isCancelled) setCart(res.data)
+    // }
+    // const getCart = async () => {
+    //   const res = await api.get(`${API_URL}/carts/my-cart`);
+    //   // console.log(res.data)
+    //   if (res.data.error) {
+    //     alert(res.data.error);
+    //   } else {
+    //     setCart(res.data);
+    //   }
+    // }
+    // getCart()
+    // setTimeout(() => {
+    //   getCart()
+    // }, 500)
+    return () => { isMounted = false }
   }, []);
 
   return (
