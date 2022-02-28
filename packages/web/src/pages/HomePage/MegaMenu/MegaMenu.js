@@ -85,6 +85,7 @@ const MegaMenu = () => {
 
   const getBrands = async () => {
     try {
+      if (!activeCategory)return
       const brandsData = await (
         await axios.get(`${API_URL}/products?category=${activeCategory}`)
       ).data;

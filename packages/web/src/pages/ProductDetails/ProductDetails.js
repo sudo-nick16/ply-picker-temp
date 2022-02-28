@@ -112,11 +112,11 @@ const ProductDetails = () => {
     setProduct(data);
     document.title = `Buy ${capitalizeFirstLetter(data.Product_Name)}`;
     setGroupID(data.Group);
-  }, []);
+  }, [location]);
 
   useEffect(async () => {
     const data = await (
-      await axios.get(`${API_URL}/products?Group=${groupID}`)
+      await axios.get(`${API_URL}/products?Group=${groupID}&limit=10`)
     ).data;
     setProductsWithGroup(data);
   }, []);

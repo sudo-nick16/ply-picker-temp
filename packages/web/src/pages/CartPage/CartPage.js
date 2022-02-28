@@ -11,6 +11,7 @@ import {
 import { RiCoupon2Line } from "react-icons/ri";
 import useAxios from "../../utils/useAxios";
 import { API_URL } from "../../constants";
+import { useNavigate } from "react-router-dom";
 
 function CartPage() {
   const api = useAxios();
@@ -20,11 +21,27 @@ function CartPage() {
   const [phone, setPhone] = useState("");
   const [payment, setPayment] = useState("COD");
   const [cartValue, setCartValue] = useState(0);
+  const [totalCartItems, setTotalCartItems] = useState(0)
 
   useEffect(() => {
     document.title = "Checkout";
   }, [])
-  
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    getTotalItems(cart)
+    updateCartValue(cart)
+  }, [cart])
+
+  const getTotalItems = (cartArr) => {
+    let sum = 0
+    cartArr.map(cartItem => {
+      sum += cartItem.quantity
+    })
+    setTotalCartItems(sum)
+  }
+
   const updateCartValue = (cartArr) => {
     setCartValue(() => cartArr.reduce((total, item) => total + item.product_id.Product_Price * item.quantity, 0));
   };
@@ -55,7 +72,6 @@ function CartPage() {
             return item;
           })
         );
-        updateCartValue(cart)
       } else {
         alert(res.data.error);
       }
@@ -77,7 +93,6 @@ function CartPage() {
         }
         return item;
       })
-      updateCartValue(updatedArr)
       setCart(updatedArr)
     }
   };
@@ -89,7 +104,6 @@ function CartPage() {
     } else {
       let updatedArr = cart.filter((item) => item._id !== id)
       setCart(updatedArr);
-      updateCartValue(updatedArr)
     }
   };
 
@@ -120,7 +134,6 @@ function CartPage() {
         alert(res.data.error);
       } else {
         setCart(res.data);
-        updateCartValue(res.data)
       }
     }
     getCart()
@@ -132,7 +145,7 @@ function CartPage() {
   return (
     <div className="container cartpagemain">
       <div className="cartpage_heading">
-        In Your Cart <span>(1 Item)</span>
+        In Your Cart <span>({totalCartItems} Item{totalCartItems == 1 ? null : 's'})</span>
       </div>
       <div className="cartpage_maincontainer">
         <div className="cartpage_product_side">

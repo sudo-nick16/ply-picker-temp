@@ -7,6 +7,7 @@ import axios from "axios";
 import { Link, useSearchParams } from "react-router-dom";
 import { API_URL } from "../../constants";
 import capitalizeFirstLetter from "../../helperFunctions/capitalizeFirstLetter";
+import lengthyText from "../../helperFunctions/lengthyText";
 
 function ProductPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -175,12 +176,7 @@ function ProductPage() {
               {/* Renders description only if description field exists */}
               {item.Product_Description
                 ? // Keeps the description limited to MAX_DESCR_LENGTH
-                  `${item.Product_Description}`.length > MAX_DESCR_LENGTH
-                  ? `${item.Product_Description}`.substring(
-                      0,
-                      MAX_DESCR_LENGTH
-                    ) + "..."
-                  : `${item.Product_Description}`
+                lengthyText(item.Product_Description, MAX_DESCR_LENGTH)
                 : null}
             </p>
             <p className="productpage_product_price">

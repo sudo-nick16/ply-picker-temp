@@ -5,6 +5,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+  cursor: pointer;
 }
 
 .suggestion_container_leftside {
