@@ -69,18 +69,20 @@ const useAxios = () => {
     }
   );
 
-  // can be used if token is not checked on frontend
   axiosA.interceptors.response.use(
     async (response) => {
       // console.log("response", response);
+      if (!response.data.error && response.data.accessToken) {
+        console.log("setting user");
+        dispatch(setUser(response.data.accessToken, true));
+      }
       return response;
     },
     async (error) => {
-      console.log("axios error", error);
-      // if (error.response.status === 403) {
-      //     await refreshToken();
-      //     return axiosA(error.config);
-      // }
+      console.log("axios error", error, error.response.data.error);
+      if (error.response.status === 403 && error.response.data.authFailed) {
+        dispatch(logout());
+      }
       return Promise.reject(error);
     }
   );

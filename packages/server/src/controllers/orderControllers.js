@@ -20,7 +20,7 @@ export const createOrder = async (req, res) => {
 
   const { address, phone, payment_mode } = req.body;
 
-  const contact_number = phone? `+91${phone}` : user.mobile_number;
+  const contact_number = phone ? `+91${phone}` : user.mobile_number;
 
   console.log(contact_number);
 
@@ -32,7 +32,7 @@ export const createOrder = async (req, res) => {
   const cartItems = await CartItem.find({ user: _id })
     .populate({ path: "product_id" })
     .exec();
-  if (!cartItems) {
+  if (!cartItems.length) {
     return res.status(404).json({
       error: "Cart is empty. Please add some items.",
     });
@@ -67,25 +67,26 @@ export const createOrder = async (req, res) => {
       contact_number: contact_number || user.mobile_number,
     });
 
+    await order.save();
     // send a message to the delivery guy
     try {
-      await twilioClient.messages.create({
+      const msg = await twilioClient.messages.create({
         // messagingServiceSid: "MG9752274e9e519418a7406176694466fa", in prod
-        body: `New Order Placed by ${user.name}\nOrder Id: ${order._id}} \nURL: http://localhost:3000/delivery/orders/${order._id}`,
+        body: `New Order Placed by ${user.name}\nOrder Id: ${order._id} \nURL: http://localhost:3000/delivery/orders/${order._id}`,
         from: TWILIO_NUMBER,
         to: DELIVERY,
         setTimeout: 10000,
       });
+      console.log(msg);
     } catch (err) {
       console.log(err);
       throw new Error("Couldn't send the order details, Please try again!");
     }
 
-    await order.save();
-
     await CartItem.deleteMany({ user: _id });
     return res.status(200).json({
       msg: "Order placed successfully",
+      order_id: order._id,
     });
   } catch (err) {
     console.log(err);
