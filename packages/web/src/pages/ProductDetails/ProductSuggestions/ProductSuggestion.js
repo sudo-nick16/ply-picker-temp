@@ -1,8 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import Slider from "react-slick";
 import "./ProductSuggestion.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useNavigate } from "react-router-dom";
+import lengthyText from "../../../helperFunctions/lengthyText";
 
 function SampleNextArrow(props) {
   const { className, style, onClick } = props;
@@ -27,6 +29,9 @@ function SamplePrevArrow(props) {
 }
 
 function ProductSuggestion(props) {
+
+  const navigate = useNavigate()
+
   var settings = {
     dots: true,
     arrows: true,
@@ -66,7 +71,7 @@ function ProductSuggestion(props) {
   };
 
   const Item = (props) => (
-    <div className="suggestion_product_main">
+    <div className="suggestion_product_main" onClick={()=>navigate(`/productdetails/${props.id}`)}>
       <div className="suggestion_container_leftside">
         <div className="production_suggestion_pimage">
           <img src={props.image} alt="" />
@@ -75,9 +80,8 @@ function ProductSuggestion(props) {
       <div className="suggestion_container_rightiside">
         <div
           className="product_suggestion_pname text-truncate"
-          style={{ maxWidth: "150px" }}
         >
-          {props.name}
+          {lengthyText(props.name, 15)}
         </div>
         <div className="product_suggestion_pamount">{props.price}</div>
       </div>
@@ -88,8 +92,9 @@ function ProductSuggestion(props) {
       <div className="product_suggestion_container">
         <h2>You might also like</h2>
         <Slider {...settings}>
-          {props.data.splice(0, 10).map((item, i) => (
+          {props.data.map((item, i) => (
             <Item key={i}
+              id={item._id}
               name={item.Product_Name}
               price={item.Product_Price}
               image={item.Product_Image}

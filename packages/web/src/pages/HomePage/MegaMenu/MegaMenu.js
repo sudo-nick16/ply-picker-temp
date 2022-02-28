@@ -85,6 +85,7 @@ const MegaMenu = () => {
 
   const getBrands = async () => {
     try {
+      if (!activeCategory)return
       const brandsData = await (
         await axios.get(`${API_URL}/products?category=${activeCategory}`)
       ).data;
@@ -143,7 +144,6 @@ const MegaMenu = () => {
             fontWeight: isShowed ? "bold" : "inherit",
           }}
           onMouseOver={mouseOverAction}
-          onClick={() => console.log("helskdajs")}
         >
           {capitalizeFirstLetter(props.title)}
         </div>
@@ -361,7 +361,7 @@ const MegaMenu = () => {
                   : "wishlist_container"
               }
             >
-              <Wishlist onClose={toggleNavbarWishlist} />
+              <Wishlist onClose={()=>setNavbarWishlist(false)} />
             </div>
           </div>
         </div>
@@ -383,8 +383,8 @@ const MegaMenu = () => {
           }}
         />
         <SearchComponent />
-        <AiOutlineShoppingCart onClick={() => navigate('/cart')} className="navBarButtons cartButton" size={22} />
-        <FaRegHeart className="navBarButtons" size={22} onClick={() => setNavbarWishlist(true)} />
+        <FaRegHeart className="navBarButtons wishlistButton" size={22} onClick={() => setNavbarWishlist(true)} />
+        <AiOutlineShoppingCart onClick={() => navigate('/cart')} className="navBarButtons" size={22} />
       </div>
       <NavBar />
     </div>

@@ -3,6 +3,8 @@ import { AiOutlineClose, AiOutlineShoppingCart } from "react-icons/ai";
 import { API_URL } from "../../../constants";
 import useAxios from "../../../utils/useAxios";
 import "./Wishlist.css";
+import Lottie from 'react-lottie';
+import * as emptyAnimationData from "../../../components/emptyAnimation/empty.json"
 
 function Wishlist(props) {
   const api = useAxios();
@@ -39,23 +41,35 @@ function Wishlist(props) {
     try {
       const res = await api.get(`${API_URL}/wishlist`);
       if (!res.data.error) {
-        console.log(res.data);
+        console.log("wishlist data", res.data);
         setWishlist(res.data);
       } else {
         alert(res.data.error);
       }
     } catch (err) {
       // alert(err);
-      
+
     }
   }, []);
 
+  const EmptyWishlist = () => {
+    return (
+      <div style={{ display: 'flex', height: '100%', flexDirection: 'column', justifyContent:'center', alignItems:'center' }}>
+        <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
+          <Lottie options={{ animationData: emptyAnimationData, autoplay: true, loop: true }} style={{cursor:'initial'}}/>
+          <div>The wishlist is empty</div>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div>
+    <div style={{ height: '100%' }}>
       <div className="wishlist_heading">
         <div>My Wishlist</div>
         <AiOutlineClose onClick={props.onClose} style={{ cursor: "pointer" }} />
       </div>
+      {wishlist.length == 0 ? <EmptyWishlist /> : null}
       {wishlist.map((item, i) => {
         return (
           <div className="wishlist_product_container" key={i}>
