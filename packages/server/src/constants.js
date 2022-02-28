@@ -16,3 +16,5 @@ export const MOBILE_TOKEN_SECRET = process.env.MOBILE_TOKEN_SECRET;
 export const SERVER_URL = process.env.SERVER_URL;
 export const SMTP_USER = process.env.SMTP_USER;
 export const SMTP_PASSWORD = process.env.SMTP_PASSWORD;
+export const DELIVERY_MSG_ID = process.env.DELIVERY_MSG_ID;
+export const OTP_MSG_ID = process.env.OTP_MSG_ID;

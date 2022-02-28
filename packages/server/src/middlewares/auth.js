@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { ACCESS_TOKEN_SECRET } from "../constants.js";
+import { ACCESS_TOKEN_SECRET, COOKIE_NAME } from "../constants.js";
 
 export const auth = (req, res, next) => {
   try {
@@ -30,9 +30,10 @@ export const auth = (req, res, next) => {
     }
   } catch (err) {
     console.log(err);
+    res.clearCookie(COOKIE_NAME);
     return res.status(403).json({
       authFailed: true,
-      error: err,
+      error: err.message,
     });
   }
 };
