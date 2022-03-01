@@ -80,7 +80,8 @@ const useAxios = () => {
     },
     async (error) => {
       console.log("axios error", error, error.response.data.error);
-      if (error.response.status === 403 && error.response.data.authFailed) {
+      if (error.response.data.authFailed) {
+        console.log("logging out because auth failed");
         dispatch(logout());
       }
       return Promise.reject(error);

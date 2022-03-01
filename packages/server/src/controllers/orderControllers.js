@@ -5,6 +5,7 @@ import validator from "validator";
 import twilio from "twilio";
 import {
   DELIVERY,
+  DELIVERY_MSG_ID,
   TWILIO_ACCOUNT_SID,
   TWILIO_AUTH_TOKEN,
   TWILIO_NUMBER,
@@ -71,9 +72,10 @@ export const createOrder = async (req, res) => {
     // send a message to the delivery guy
     try {
       const msg = await twilioClient.messages.create({
-        // messagingServiceSid: "MG9752274e9e519418a7406176694466fa", in prod
+        // in prod
+        messagingServiceSid: DELIVERY_MSG_ID,
         body: `New Order Placed by ${user.name}\nOrder Id: ${order._id} \nURL: http://localhost:3000/delivery/orders/${order._id}`,
-        from: TWILIO_NUMBER,
+        // from: TWILIO_NUMBER,
         to: DELIVERY,
         setTimeout: 10000,
       });

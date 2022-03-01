@@ -11,6 +11,7 @@ import {
   COOKIE_NAME,
   MOBILE_TOKEN_SECRET,
   ORIGIN,
+  OTP_MSG_ID,
   REFRESH_TOKEN_SECRET,
   SMTP_PASSWORD,
   SMTP_USER,
@@ -69,9 +70,10 @@ export const verifyMobile = async (req, res) => {
 
   try {
     await twilioClient.messages.create({
-      // messagingServiceSid: "", in prod
+      // in prod
+      messagingServiceSid: OTP_MSG_ID,
       body: `Your OTP is ${otp}`,
-      from: TWILIO_NUMBER,
+      // from: TWILIO_NUMBER,
       to: number,
       setTimeout: 10000,
     });
@@ -262,8 +264,9 @@ export const resetPassword = async (req, res) => {
 
     const payload = jwt.verify(token, RESET_PASSWORD_SECRET);
     if (!payload) {
+      throw new Error("Invalid token");
     }
-    user.password = password;
+    user.password = await hashPassword(password);
     user.token_version += 1;
     await user.save();
     return res.status(200).json({
@@ -271,7 +274,7 @@ export const resetPassword = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    return res.status(400).json({
+    return res.status(401).json({
       error: "Link Expired.",
     });
   }
@@ -280,23 +283,36 @@ export const resetPassword = async (req, res) => {
 export const refreshToken = async (req, res) => {
   const token = req.cookies.plypicker;
   let payload;
-  if (!token) {
-    return res.status(400).json({
-      error: "No token.",
-    });
-  }
   try {
-    payload = jwt.verify(token, REFRESH_TOKEN_SECRET);
+    if (!token) {
+      throw new Error("No token");
+      // return res.status(401).json({
+      //   authFailed: true,
+      //   error: "No token.",
+      // });
+    }
+    try {
+      payload = jwt.verify(token, REFRESH_TOKEN_SECRET);
+    } catch (err) {
+      console.log(err);
+      throw new Error("Invalid token");
+    }
     const user = await User.findById(payload._id).exec();
     if (!user) {
-      return res.status(400).json({
-        error: "User does not exist",
-      });
+      throw new Error("User does not exist");
+      // return res.status(401).json({
+      //   authFailed: true,
+      //   error: "User does not exist",
+      // });
     }
-    if (user.tokenVersion !== payload.tokenVersion) {
-      return res.status(400).json({
-        error: "Token expired",
-      });
+    console.log(payload, "payload");
+    if (user.token_version !== payload.token_version) {
+      console.log("token version not matched");
+      throw new Error("Token version not matched");
+      // return res.status(401).json({
+      //   authFailed: true,
+      //   error: "Token expired",
+      // });
     }
     setCookies(res, user);
     return res.status(200).json({
@@ -304,9 +320,11 @@ export const refreshToken = async (req, res) => {
       msg: "Token refreshed.",
     });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
+    res.clearCookie(COOKIE_NAME);
     return res.status(401).json({
-      error: "Unauthorized",
+      authFailed: true,
+      error: err.message,
     });
   }
 };
