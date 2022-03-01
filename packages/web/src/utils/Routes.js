@@ -23,6 +23,7 @@ import ProductPage from "../pages/ProductPage/ProductPage";
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 import CartPage from "../pages/CartPage/CartPage";
 import MegaMenu from "../pages/HomePage/MegaMenu/MegaMenu";
+import EditProfilePage from "../pages/EditProfilePage/EditProfilePage";
 
 const LayoutsWithNavbar = () => (
   <>
@@ -36,6 +37,7 @@ const AllRoutes = () => {
       {/* <LayoutsWithNavbar /> */}
       <Routes>
         <Route path="/" element={<LayoutsWithNavbar />}>
+          <Route path="/editprofilepage" element={<EditProfilePage />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/products" element={<ProductPage />} />
           <Route path="/productdetails/:id" element={<ProductDetails />} />
