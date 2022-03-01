@@ -125,3 +125,37 @@
 .edit_profile_password_form input {
   width: 50%;
 }
+
+@media only screen and (max-width: 768px) {
+  .editprofilepage_main {
+    flex-direction: column;
+  }
+
+  .editprofilepage_leftside {
+    display: none;
+  }
+
+  .editprofilepage_rightside {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .edit_profile_info_form .info_form_row1 {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .edit_profile_info_form .info_form_row1 .info_form_firstname {
+    margin-bottom: 20px;
+  }
+}
+
+@media only screen and (max-width: 359px) {
+  .edit_profile_info_form,
+  .edit_profile_password_form {
+    padding: 2.4rem 0.8rem;
+  }
+}
