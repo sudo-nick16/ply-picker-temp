@@ -21,28 +21,28 @@ function CartPage() {
   const [phone, setPhone] = useState("");
   const [payment, setPayment] = useState("COD");
   const [cartValue, setCartValue] = useState(0);
-  const [totalCartItems, setTotalCartItems] = useState(0)
+  const [totalCartItems, setTotalCartItems] = useState(0);
 
   useEffect(() => {
     document.title = "Checkout";
-  }, [])
+  }, []);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    getTotalItems(cart)
-    updateCartValue(cart)
-  }, [cart])
+    getTotalItems(cart);
+    updateCartValue(cart);
+  }, [cart]);
 
   const getTotalItems = (cartArr) => {
-    let sum = 0
-    cartArr.map(cartItem => {
-      sum += cartItem.quantity
-    })
-    setTotalCartItems(sum)
-  }
+    let sum = 0;
+    cartArr.map((cartItem) => {
+      sum += cartItem.quantity;
+    });
+    setTotalCartItems(sum);
+  };
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const updateCartValue = (cartArr) => {
     setCartValue(() =>
@@ -151,40 +151,28 @@ function CartPage() {
   };
 
   useEffect(() => {
-    let isMounted = true
-    api.get(`${API_URL}/carts/my-cart`).then(res => {
-      console.log(res.data)
-      if (isMounted) {
-        setCart(res.data)
+    const getCart = async () => {
+      const res = await api.get(`${API_URL}/carts/my-cart`);
+      // console.log(res.data)
+      if (res.data.error) {
+        alert(res.data.error);
+      } else {
+        setCart(res.data);
       }
-    })
-    .catch(err=>console.error(err))
-    // if (res.data.error){
-    //   alert(res.data.error)
-    // }else{
-    //   if(!isCancelled) setCart(res.data)
-    // }
-    // const getCart = async () => {
-    //   const res = await api.get(`${API_URL}/carts/my-cart`);
-    //   // console.log(res.data)
-    //   if (res.data.error) {
-    //     alert(res.data.error);
-    //   } else {
-    //     setCart(res.data);
-    //   }
-    // }
-    // getCart()
-    // setTimeout(() => {
-    //   getCart()
-    // }, 500)
-    return () => { isMounted = false }
-
+    }
+    getCart()
+    setTimeout(() => {
+      getCart()
+    }, 500)
   }, []);
 
   return (
     <div className="container cartpagemain">
       <div className="cartpage_heading">
-        In Your Cart <span>({totalCartItems} Item{totalCartItems == 1 ? null : 's'})</span>
+        In Your Cart{" "}
+        <span>
+          ({totalCartItems} Item{totalCartItems == 1 ? null : "s"})
+        </span>
       </div>
       <div className="cartpage_maincontainer">
         <div className="cartpage_product_side">
