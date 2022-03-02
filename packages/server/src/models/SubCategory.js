@@ -12,7 +12,7 @@ const SubCategorySchema = new mongoose.Schema(
     },
     Sub_Category_image: {
       type: "string",
-      required: true,
+      // required: true,
     },
     Category: {
       type: ObjectId,
