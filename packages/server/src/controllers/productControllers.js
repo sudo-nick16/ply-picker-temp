@@ -94,14 +94,15 @@ export const list = (req, res) => {
       { Product_Price: { $gte: searchByMinPrice, $lte: searchByMaxPrice } },
     ],
   })
-    .populate("Category")
-    .populate("Sub_Category")
-    .populate("Group")
+    .populate("category")
+    .populate("sub_category")
+    .populate("group")
+    .populate("sub_group")
     .sort([[sortBy, order]])
     .limit(limit)
     .exec((err, data) => {
       if (err) {
-        res.status(400).json({
+        return res.status(400).send({
           error: err,
         });
       }
@@ -164,7 +165,7 @@ export const listBySearch = (req, res) => {
     });
 };
 
-export const search = (req, res, next) => {};
+export const search = (req, res, next) => { };
 
 // only while testing
 // export const allProducts = async (req, res) => {
