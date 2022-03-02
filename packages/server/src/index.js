@@ -7,6 +7,7 @@ import CategoryRouter from "./routes/categoryRoutes.js";
 import SubCategoryRouter from "./routes/subCategoryRoutes.js";
 import ProductRouter from "./routes/product.js";
 import GroupRouter from "./routes/groupRoutes.js";
+import SubGroupRouter from "./routes/subGroupRoutes.js"
 import cartRoutes from "./routes/cartRoutes.js";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -49,6 +50,7 @@ app.get("/", (_, res) => {
   res.send("Hello boi!");
 });
 
+app.use("/api", cors(corsOptions), SubGroupRouter);
 app.use("/api", cors(corsOptions), GroupRouter);
 app.use("/api", cors(corsOptions), CategoryRouter);
 app.use("/api", cors(corsOptions), ProductRouter);
