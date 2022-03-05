@@ -24,6 +24,7 @@ import ProductDetails from "../pages/ProductDetails/ProductDetails";
 import CartPage from "../pages/CartPage/CartPage";
 import MegaMenu from "../pages/HomePage/MegaMenu/MegaMenu";
 import EditProfilePage from "../pages/EditProfilePage/EditProfilePage";
+import AddressMain from "../pages/Address/AddressMain";
 
 const LayoutsWithNavbar = () => (
   <>
@@ -38,6 +39,7 @@ const AllRoutes = () => {
       <Routes>
         <Route path="/" element={<LayoutsWithNavbar />}>
           <Route path="/editprofilepage" element={<EditProfilePage />} />
+          <Route path="/addresspage" element={<AddressMain />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/products" element={<ProductPage />} />
           <Route path="/productdetails/:id" element={<ProductDetails />} />
