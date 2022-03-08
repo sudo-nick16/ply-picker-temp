@@ -6,8 +6,42 @@ function EditProfilePage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [oldPass, setOldPass] = useState("");
+  const [pass, setPass] = useState("");
+  const [conPass, setConPass] = useState("");
 
   const api = useAxios();
+
+  const saveChanges = async () => {
+    const res = await api.patch('/me', {
+      name,
+      phone,
+      email
+    })
+    console.log(res)
+    if(!res.data.error){
+      alert('Profile updated successfully')
+    }else{
+      alert('Error updating profile')
+    }
+  }
+
+  const updatePassword = async () => {
+    if(pass !== conPass){
+      return alert('Passwords do not match');
+    }
+    const res = await api.patch('/me/password', {
+      oldPass,
+      password: conPass,
+    })
+    console.log(res.data)
+    if(!res.data.error){
+      alert('Password updated successfully')
+    }else{
+      console.log(res.data.error)
+      alert('Error updating password')
+    }
+  }
 
   useEffect(async () => {
     const res = await api.get(`/me`);
@@ -44,7 +78,7 @@ function EditProfilePage() {
             >
               <div className="info_form_row1">
                 <div className="info_form_firstname">
-                  <label>Name</label>
+                  <label>Name :</label>
                   <input
                     type="text"
                     placeholder="First Name"
@@ -59,12 +93,12 @@ function EditProfilePage() {
               </div>
               <div className="info_form_row2">
                 <div className="info_form_mobilenumber">
-                  <label>Mobile No.</label>
-                  <input type="text" placeholder="Mobile" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                  <label>Email :</label>
+                  <input type="text" placeholder="Mobile" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
               </div>
               <div className="info_form_button_container">
-                <div className="info_form_button">Save Changes</div>
+                <div className="info_form_button" onClick={saveChanges}>Save Changes</div>
               </div>
             </form>
           </div>
@@ -81,23 +115,23 @@ function EditProfilePage() {
               <div className="info_form_row1">
                 <div className="info_form_firstname">
                   <label>Old Password</label>
-                  <input type="text" placeholder="Old Password" />
+                  <input type="text" value={oldPass} placeholder="Old Password" onChange={(e) => setOldPass(e.target.value)} />
                 </div>
               </div>
               <div className="info_form_row2">
                 <div className="info_form_mobilenumber">
                   <label>New Password</label>
-                  <input type="text" placeholder="New Password" />
+                  <input type="text" value={pass} placeholder="New Password" onChange={(e) => setPass(e.target.value)} />
                 </div>
               </div>
               <div className="info_form_row3">
                 <div className="info_form_mobilenumber">
                   <label>Confirm Password</label>
-                  <input type="text" placeholder="Confirm Password" />
+                  <input type="text" placeholder="Confirm Password" value={conPass} onChange={(e) => setConPass(e.target.value)} />
                 </div>
               </div>
               <div className="info_form_button_container">
-                <div className="info_form_button">Save Changes</div>
+                <div className="info_form_button" onClick={updatePassword}>Save Changes</div>
               </div>
             </form>
           </div>
