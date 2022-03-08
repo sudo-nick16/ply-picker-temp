@@ -25,6 +25,7 @@ import CartPage from "../pages/CartPage/CartPage";
 import MegaMenu from "../pages/HomePage/MegaMenu/MegaMenu";
 import EditProfilePage from "../pages/EditProfilePage/EditProfilePage";
 import AddressMain from "../pages/Address/AddressMain";
+import DeliveryPage from "../pages/Delivery/DeliveryPage";
 
 const LayoutsWithNavbar = () => (
   <>
@@ -38,13 +39,13 @@ const AllRoutes = () => {
       {/* <LayoutsWithNavbar /> */}
       <Routes>
         <Route path="/" element={<LayoutsWithNavbar />}>
-          <Route path="/editprofilepage" element={<EditProfilePage />} />
           <Route path="/addresspage" element={<AddressMain />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/products" element={<ProductPage />} />
           <Route path="/productdetails/:id" element={<ProductDetails />} />
         </Route>
         {/* <Route path="/product/:p_id" element={<Product />} /> */}
+        <Route path="/delivery/orders/:order_id" element={<DeliveryPage />} />
         <Route
           path="/me"
           element={
@@ -81,7 +82,7 @@ const AllRoutes = () => {
           path="/profile/edit"
           element={
             <ProtectedRoute redirectTo="/login">
-              <EditProfile />
+              <EditProfilePage />
             </ProtectedRoute>
           }
         />

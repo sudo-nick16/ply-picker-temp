@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { API_URL } from "../../constants";
 import useAxios from "../../utils/useAxios";
 import "./Order.scss";
 import ProductCard from "./ProductCard";

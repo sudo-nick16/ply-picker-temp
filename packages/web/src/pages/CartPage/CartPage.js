@@ -42,8 +42,6 @@ function CartPage() {
     setTotalCartItems(sum);
   };
 
-  // const navigate = useNavigate();
-
   const updateCartValue = (cartArr) => {
     setCartValue(() =>
       cartArr.reduce(
@@ -159,11 +157,11 @@ function CartPage() {
       } else {
         setCart(res.data);
       }
-    }
-    getCart()
+    };
+    getCart();
     setTimeout(() => {
-      getCart()
-    }, 500)
+      getCart();
+    }, 500);
   }, []);
 
   return (

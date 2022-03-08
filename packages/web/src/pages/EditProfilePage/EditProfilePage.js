@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import useAxios from "../../utils/useAxios";
 import "./EditProfilePage.css";
 
 function EditProfilePage() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+
+  const api = useAxios();
+
+  useEffect(async () => {
+    const res = await api.get(`/me`);
+    console.log(res, res.data, "me page");
+    if (!res.data.error) {
+      const { name, email, mobile } = res.data;
+      setName(name);
+      setEmail(email);
+      setPhone(mobile);
+    }
+  }, []);
+
   return (
     <div className="editprofilepage_outercontainer">
       <div className="container editprofilepage_main">
@@ -26,18 +44,23 @@ function EditProfilePage() {
             >
               <div className="info_form_row1">
                 <div className="info_form_firstname">
-                  <label>First Name</label>
-                  <input type="text" placeholder="First Name" />
+                  <label>Name</label>
+                  <input
+                    type="text"
+                    placeholder="First Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
                 </div>
-                <div className="info_form_lastname">
+                {/* <div className="info_form_lastname">
                   <label>Last Name</label>
                   <input type="text" placeholder="Last Name" />
-                </div>
+                </div> */}
               </div>
               <div className="info_form_row2">
                 <div className="info_form_mobilenumber">
                   <label>Mobile No.</label>
-                  <input type="text" placeholder="Mobile" />
+                  <input type="text" placeholder="Mobile" value={phone} onChange={(e) => setPhone(e.target.value)} />
                 </div>
               </div>
               <div className="info_form_button_container">

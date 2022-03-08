@@ -1,11 +1,15 @@
 import { Router } from "express";
-import { me } from "../controllers/userControllers.js";
+import { me, updateMe } from "../controllers/userControllers.js";
 import { auth } from "../middlewares/auth.js";
 
 const router = Router();
 
-router.post("/me", auth, (req, res) => {
+router.get("/me", auth, (req, res) => {
   me(req, res);
+});
+
+router.patch("/me", auth, (req, res) => {
+  updateMe(req, res);
 });
 
 export default router;

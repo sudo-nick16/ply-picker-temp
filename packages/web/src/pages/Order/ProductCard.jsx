@@ -31,7 +31,7 @@ const ProductCard = ({ p_id, quantity, price }) => {
         </h4>
         <p className="text-truncate">{product.Product_Description}</p>
         <h6>Quantity: {quantity}</h6>
-        <h6>Cost: {price * quantity}</h6>
+        <h6>Cost: {price}</h6>
       </div>
     </div>
   );

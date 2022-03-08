@@ -108,10 +108,13 @@ export const getOrders = async (req, res) => {
 };
 
 export const getOrder = async (req, res) => {
-  const { _id } = req.user;
+  // const { _id } = req.user;
   const { order_id } = req.params;
-  const order = await Order.findOne({ _id: order_id, user_id: _id })
+  console.log("order")
+  console.log(order_id);
+  const order = await Order.findById(order_id)
     .populate({ path: "order_items" })
     .exec();
+  console.log(order);
   return res.status(200).json(order);
 };

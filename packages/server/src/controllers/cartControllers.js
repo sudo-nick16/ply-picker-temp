@@ -97,6 +97,11 @@ export const removeProductFromCart = async (req, res) => {
 
 export const addToCart = async (req, res) => {
   const { product_id } = req.body;
+  if(!product_id) {
+    return res.status(404).json({
+      error: "Invalid Product Id. Could not add to cart.",
+    });
+  }
   const product = await Product.findById(product_id).exec();
   if (!product) {
     return res.status(404).json({

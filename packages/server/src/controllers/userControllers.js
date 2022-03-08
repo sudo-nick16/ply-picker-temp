@@ -20,3 +20,7 @@ export const me = async (req, res) => {
     });
   }
 };
+
+export const updateMe =  async (req, res) => {
+  // const {}
+}
