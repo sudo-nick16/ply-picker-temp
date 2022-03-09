@@ -95,9 +95,10 @@ function ProductSuggestion(props) {
           {props.data.map((item, i) => (
             <Item key={i}
               id={item._id}
-              name={item.Product_Name}
-              price={item.Product_Price}
-              image={item.Product_Image}
+              name={item.name}
+              price={item.actual_price}
+              // image={item.Product_Image}
+              image={"https://images.unsplash.com/photo-1646617747557-13b45b277bc6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"}
             />
           ))}
         </Slider>

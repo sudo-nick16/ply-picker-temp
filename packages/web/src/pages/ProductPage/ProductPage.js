@@ -22,12 +22,17 @@ function ProductPage() {
   let CATEGORY_SEARCH_PARAM;
   let SUBCATEGORY_SEARCH_PARAM;
   let GROUP_SEARCH_PARAM;
+  let SUBGROUP_SEARCH_PARAM;
 
   let params = {};
 
+  const getSubGroupData = async (subGroupID) =>{
+    const subGroupData = await (await axios.get(`${API_URL}/subgroups/${subGroupID}`)).data
+    document.title = `Buy ${capitalizeFirstLetter(subGroupData.SubGroup_name)} at Best Price in India`
+  }
+
   const getGroupData = async (groupID) =>{
     const groupData = await (await axios.get(`${API_URL}/groups/${groupID}`)).data
-    // console.log(groupData.Group_name)
     document.title = `Buy ${capitalizeFirstLetter(groupData.Group_name)} at Best Price in India`
   }
 
@@ -63,6 +68,12 @@ function ProductPage() {
     getGroupData(GROUP_SEARCH_PARAM)
   }
 
+  if (searchParams.get("subgroup")){
+    SUBGROUP_SEARCH_PARAM = searchParams.get("subgroup");
+    params.subgroup = SUBGROUP_SEARCH_PARAM;
+    getSubGroupData(SUBGROUP_SEARCH_PARAM)
+  }
+
   var esc = encodeURIComponent;
   let query = Object.keys(params)
     .map((k) => esc(k) + "=" + esc(params[k]))
@@ -81,14 +92,14 @@ function ProductPage() {
 
   const getMax = (productData) => {
     let maxi = 0;
-    productData.map((item) => (maxi = Math.max(maxi, item.Product_Price)));
+    productData.map((item) => (maxi = Math.max(maxi, item.actual_price)));
     setMaxPrice(maxi);
     return maxi;
   };
 
   const getMin = (productData) => {
     let mini = Number.MAX_SAFE_INTEGER;
-    productData.map((item) => (mini = Math.min(mini, item.Product_Price)));
+    productData.map((item) => (mini = Math.min(mini, item.actual_price)));
     setMinPrice(mini);
     return mini;
   };
@@ -115,6 +126,8 @@ function ProductPage() {
     // order => -1 => descending
     // +1 => ascending
 
+    setPageNumber(0)
+
     if (!isChecked) {
       setActiveSortingStatus("");
       return setItems(products);
@@ -122,11 +135,11 @@ function ProductPage() {
 
     let arr = [...productsArray];
     if (order === 1) {
-      arr.sort((a, b) => a.Product_Price - b.Product_Price);
+      arr.sort((a, b) => a.actual_price - b.actual_price);
       setActiveSortingStatus("asc");
     }
     if (order === -1) {
-      arr.sort((a, b) => b.Product_Price - a.Product_Price);
+      arr.sort((a, b) => b.actual_price - a.actual_price);
       setActiveSortingStatus("des");
     }
     setItems(arr);
@@ -136,30 +149,31 @@ function ProductPage() {
   const [pageNumber, setPageNumber] = useState(0);
 
   // itemsperpage
-  const usersPerPage = 6;
+  const PRODUCTS_PER_PAGE = 9;
 
   // itemsvisited
-  const pagesVisited = pageNumber * usersPerPage;
+  const pagesVisited = pageNumber * PRODUCTS_PER_PAGE;
 
+  console.log(items.length)
   // Deciding number of pages
-  var pageCount = Math.ceil(items.length / usersPerPage);
+  var pageCount = Math.ceil(items.length / PRODUCTS_PER_PAGE);
 
   // Changing page function
-  const changePage = ({ selected }) => {
+  const changePage = ({selected}) => {
     setPageNumber(selected);
   };
 
   // Maximum description length
-  const MAX_DESCR_LENGTH = 100;
+  const MAX_DESCR_LENGTH = 50;
 
   // passing product data via props
   const listItems = items
     .filter(
       (item) =>
-        item.Product_Price >= Math.min(...value) &&
-        item.Product_Price <= Math.max(...value)
+        item.actual_price >= Math.min(...value) &&
+        item.actual_price <= Math.max(...value)
     )
-    .slice(pagesVisited, pagesVisited + usersPerPage)
+    .slice(pagesVisited, pagesVisited + PRODUCTS_PER_PAGE)
     .map((item) => (
       <div className="productpage_card" key={item._id}>
         <Link
@@ -167,21 +181,22 @@ function ProductPage() {
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <div className="productpage_card_img">
-            <img src={item.Product_Image} alt={item.Product_Name} />
+            <img src="https://images.unsplash.com/photo-1646746868856-278a64a3a7c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"/>
+            {/* <img src={item.Product_Image} alt={item.name} /> */}
           </div>
           <div className="productpage_product_info">
-            <h2 className="productpage_product_heading">{item.Product_Name}</h2>
+            <h2 className="productpage_product_heading">{item.name}</h2>
             <h3 className="productpage_product_code">{item.product_code}</h3>
             <p className="productpage_product_description">
               {/* Renders description only if description field exists */}
-              {item.Product_Description
+              {item.description
                 ? // Keeps the description limited to MAX_DESCR_LENGTH
-                lengthyText(item.Product_Description, MAX_DESCR_LENGTH)
+                lengthyText(item.description, MAX_DESCR_LENGTH)
                 : null}
             </p>
             <p className="productpage_product_price">
-              <span>{item.product_currency}</span>
-              {item.Product_Price}
+              <span>₹</span>
+              {item.actual_price}
             </p>
           </div>
         </Link>
@@ -192,9 +207,9 @@ function ProductPage() {
   pageCount = Math.ceil(
     items.filter(
       (item) =>
-        item.Product_Price >= Math.min(...value) &&
-        item.Product_Price <= Math.max(...value)
-    ).length / usersPerPage
+        item.actual_price >= Math.min(...value) &&
+        item.actual_price <= Math.max(...value)
+    ).length / PRODUCTS_PER_PAGE
   );
 
   var paginationBar = <div></div>;
@@ -205,6 +220,7 @@ function ProductPage() {
         nextLabel={"Next"}
         pageCount={pageCount}
         onPageChange={changePage}
+        forcePage={pageNumber}
         containerClassName={"paginationBttns"}
         previousLinkClassName={"previousBttn"}
         nextLinkClassName={"nextBttn"}
@@ -212,8 +228,6 @@ function ProductPage() {
         activeClassName={"paginationActive"}
       />
     );
-  } else {
-    paginationBar = <div></div>;
   }
 
   return (

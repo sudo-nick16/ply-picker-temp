@@ -67,6 +67,7 @@ export const list = (req, res) => {
     ? parseInt(req.query.limit)
     : Number.MAX_SAFE_INTEGER;
   let searchByProdName = req.query.name ? req.query.name : "";
+  let searchBySubGroup = req.query.subgroup
   let searchByGroup = req.query.group;
   let searchByCategory = req.query.category;
   let searchBySubCategory = req.query.subcategory;
@@ -78,13 +79,17 @@ export const list = (req, res) => {
   let filters = {};
 
   if (searchByCategory) {
-    filters.Category = searchByCategory;
+    filters.category = searchByCategory;
   }
   if (searchBySubCategory) {
-    filters.Sub_Category = searchBySubCategory;
+    filters.sub_category = searchBySubCategory;
   }
   if (searchByGroup) {
-    filters.Group = searchByGroup;
+    filters.group = searchByGroup;
+  }
+
+  if (searchBySubGroup){
+    filters.sub_group = searchBySubGroup;
   }
 
   Product.find({
@@ -94,10 +99,10 @@ export const list = (req, res) => {
       { Product_Price: { $gte: searchByMinPrice, $lte: searchByMaxPrice } },
     ],
   })
-    .populate("category")
-    .populate("sub_category")
-    .populate("group")
-    .populate("sub_group")
+    // .populate("category")
+    // .populate("sub_category")
+    // .populate("group")
+    // .populate("sub_group")
     .sort([[sortBy, order]])
     .limit(limit)
     .exec((err, data) => {
