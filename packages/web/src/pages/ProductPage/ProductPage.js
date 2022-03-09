@@ -178,6 +178,7 @@ function ProductPage() {
       <div className="productpage_card" key={item._id}>
         <Link
           to={`/productdetails/${item._id}`}
+          target="_blank"
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <div className="productpage_card_img">
