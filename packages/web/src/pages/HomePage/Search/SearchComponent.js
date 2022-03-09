@@ -12,15 +12,16 @@ const SearchComponent = () => {
 
   const [searchValue, setSearchValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [groups, setGroups] = useState([]);
+  const [subGroups, setSubGroups] = useState([])
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loadGroups = async () => {
-      const response = await axios.get(`${API_URL}/groups`);
-      setGroups(response.data);
-    };
-    loadGroups();
+    const loadSubGroups = async () => {
+      const subGroupData = await (await axios.get(`${API_URL}/subgroups`)).data
+      setSubGroups(subGroupData)
+      console.log(subGroupData)
+    }
+    loadSubGroups()
   }, []);
 
   const suggestionHandler = (value) => {
@@ -31,9 +32,9 @@ const SearchComponent = () => {
   const onChangeHandler = (value) => {
     let matches = [];
     if (value.length > 0) {
-      matches = groups.filter((group) => {
+      matches = subGroups.filter((subGroup) => {
         const regex = new RegExp(`${value}`, "gi");
-        return group.Group_name.match(regex);
+        return subGroup.SubGroup_name.match(regex);
       });
     }
     setSuggestions(matches);
@@ -45,7 +46,8 @@ const SearchComponent = () => {
     return (
       <Link
         style={{ textDecoration: "none", color: "inherit" }}
-        to={`/products/?group=${suggestion._id}`}
+        to={`/products/?subgroup=${suggestion._id}`}
+        onClick={() => suggestionHandler(suggestion.SubGroup_name)}
       >
         <div
           className="searchbar_output"
@@ -55,16 +57,15 @@ const SearchComponent = () => {
           }}
           onMouseOver={() => setActiveSuggestion(true)}
           onMouseLeave={() => setActiveSuggestion(false)}
-          onClick={() => suggestionHandler(suggestion.Product_Name)}
         >
-          {suggestion.Group_name}
+          {suggestion.SubGroup_name}
         </div>
       </Link>
     );
   };
 
   return (
-    <div style={{ flexGrow:1 }}>
+    <div style={{ flexGrow: 1 }}>
       <input
         className="searchbar_search"
         placeholder="What are you looking for?"
