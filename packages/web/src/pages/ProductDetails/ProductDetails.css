@@ -34,7 +34,7 @@
 }
 
 .mainproduct_image {
-  height: 500px;
+  max-height: 400px;
   width: 500px;
 }
 
