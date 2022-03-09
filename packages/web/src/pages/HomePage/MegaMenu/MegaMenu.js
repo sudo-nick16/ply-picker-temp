@@ -104,7 +104,7 @@ const MegaMenu = () => {
       ).data;
       let arr = [];
       brandsData.map((product) =>
-        arr.push(capitalizeFirstLetter(product.Brand))
+        arr.push(capitalizeFirstLetter(product.brand))
       );
       arr = [...new Set(arr)];
       setBrands(arr);
