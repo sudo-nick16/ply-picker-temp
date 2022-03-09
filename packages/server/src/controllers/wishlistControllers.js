@@ -61,10 +61,11 @@ export const getWishList = async (req, res) => {
     .populate({
       path: "wishlist",
       select: [
-        "Product_Name",
-        "Product_Price",
+        "name",
+        "actual_price",
+        "discount_price",
         "Product_Image",
-        "Product_Description",
+        "description",
       ],
     })
     .exec();

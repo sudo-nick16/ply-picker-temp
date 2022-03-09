@@ -79,13 +79,13 @@ function Wishlist(props) {
               </div>
               <div className="wishlist_product_text">
                 <div className="wishlist_product_text_heading">
-                  <a href="#">{item.Product_Name}</a>
+                  <a href="#">{item.name}</a>
                 </div>
                 <div className="wishlist_product_text_retail_price">
-                  Retail Price <span>₹ {item.Product_Price}</span>
+                  Retail Price <span>₹ {item.actual_price}</span>
                 </div>
                 <div className="wishlist_product_text_offer_price">
-                  Offer Price <span>₹ {item.Product_Price}</span>
+                  Offer Price <span>₹ {item.actual_price}</span>
                 </div>
               </div>
             </div>
