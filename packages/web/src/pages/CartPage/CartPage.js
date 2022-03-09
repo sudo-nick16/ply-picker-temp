@@ -11,7 +11,7 @@ import {
 import { RiCoupon2Line } from "react-icons/ri";
 import useAxios from "../../utils/useAxios";
 import { API_URL } from "../../constants";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function CartPage() {
   const api = useAxios();
@@ -45,7 +45,7 @@ function CartPage() {
   const updateCartValue = (cartArr) => {
     setCartValue(() =>
       cartArr.reduce(
-        (total, item) => total + item.product_id.Product_Price * item.quantity,
+        (total, item) => total + item.product_id.actual_price * item.quantity,
         0
       )
     );
@@ -54,14 +54,14 @@ function CartPage() {
   const addToCart = (p_id) => {
     let outOfStock = false;
 
-    cart.map((cartItem) => {
-      if (cartItem.product_id._id == p_id) {
-        if (cartItem.quantity == cartItem.product_id.Quantity) {
-          alert("Max quantity reached");
-          outOfStock = true;
-        }
-      }
-    });
+    // cart.map((cartItem) => {
+    //   if (cartItem.product_id._id == p_id) {
+    //     if (cartItem.quantity == cartItem.product_id.Quantity) {
+    //       alert("Max quantity reached");
+    //       outOfStock = true;
+    //     }
+    //   }
+    // });
 
     const postCart = async () => {
       const res = await api.post(`${API_URL}/carts`, {
@@ -159,9 +159,6 @@ function CartPage() {
       }
     };
     getCart();
-    setTimeout(() => {
-      getCart();
-    }, 500);
   }, []);
 
   return (
@@ -200,19 +197,20 @@ function CartPage() {
           {cart.map((cartItem) => {
             let product = cartItem.product_id;
             return (
-              <div key={cartItem._id} className="product_side_product">
+              <div key={cartItem._id} className="product_side_product" >
                 <div className="product_product_image_info">
                   <div className="product_image_image">
                     <img
                       width={100}
                       height={100}
-                      src={product.Product_Image}
+                      // src={product.Product_Image}
+                      src={"https://images.unsplash.com/photo-1640622843377-6b5af9417e70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"}
                       alt=""
                     />
                   </div>
                   <div className="product_product_info">
                     <div className="product_product_info_heading">
-                      <a href="#">{product.Product_Name}</a>
+                      <Link to={`/productdetails/${product._id}`}>{product.name}</Link>
                     </div>
                     <div className="product_product_info_warranty">
                       <p>36 Months' Warranty, 100% Genuine</p>
@@ -260,7 +258,7 @@ function CartPage() {
                       }}
                     >
                       Rs.{" "}
-                      {cartItem.quantity * cartItem.product_id.Product_Price}
+                      {cartItem.quantity * cartItem.product_id.actual_price}
                     </div>
                   </div>
                   <div className="product_remove_wishlist">
