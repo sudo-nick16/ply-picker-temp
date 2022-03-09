@@ -203,8 +203,7 @@ function CartPage() {
                     <img
                       width={100}
                       height={100}
-                      // src={product.Product_Image}
-                      src={"https://images.unsplash.com/photo-1640622843377-6b5af9417e70?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"}
+                      src={product.attributes.image[0]}
                       alt=""
                     />
                   </div>

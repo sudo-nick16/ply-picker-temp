@@ -182,8 +182,7 @@ function ProductPage() {
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <div className="productpage_card_img">
-            <img src="https://images.unsplash.com/photo-1646746868856-278a64a3a7c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"/>
-            {/* <img src={item.Product_Image} alt={item.name} /> */}
+            <img src={item.attributes.image[0]} alt={item.name} />
           </div>
           <div className="productpage_product_info">
             <h2 className="productpage_product_heading">{item.name}</h2>

@@ -132,8 +132,7 @@ const ProductDetails = () => {
                       src={item.product_image[index]}
                       alt={item.product_name}
                     /> */}
-              {/* <img src={product.Product_Image} alt={product.name} /> */}
-              <img src={"https://images.unsplash.com/photo-1646734104317-4bcd21298b3c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"} alt={product.name} />
+              <img src={product.attributes.image[0]} alt={product.name} />
             </div>
 
             {/* <div
