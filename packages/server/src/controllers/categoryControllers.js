@@ -31,3 +31,9 @@ export const getCategories = (req,res) => {
         res.status(200).json(data)
     })
 }
+
+export const remove = (req, res) => {
+    Category.findByIdAndRemove(req.params.categoryID).then(doc => {
+      res.send(doc)
+    }).catch(err => res.status(400).send(err))
+  }
