@@ -1,7 +1,7 @@
 import axios from "axios";
 import { API_URL } from "../constants";
 import { useStore } from "../store/store";
-import { logout, setUser } from "../store/reducers/userReducer";
+import { logout, setUser, setAuth } from "../store/reducers/userActions";
 import jwt_decode from "jwt-decode";
 import { useEffect, useState } from "react";
 
@@ -15,6 +15,10 @@ const useAxios = () => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${state.accessToken}`,
     },
+    validateStatus: (status) => {
+      // don't want axios throwin error on 4xx and 5xx #sorry axios
+      return true
+    }
   });
 
   const refreshToken = async () => {
@@ -31,7 +35,7 @@ const useAxios = () => {
     );
 
     if (!response.data.error && response.data.accessToken) {
-      dispatch(setUser(response.data.accessToken, true));
+      dispatch(setAuth(response.data.accessToken, true));
       return response.data.accessToken;
     } else {
       console.log("logging out because couldn't refresh");
@@ -74,7 +78,7 @@ const useAxios = () => {
       // console.log("response", response);
       if (!response.data.error && response.data.accessToken) {
         console.log("setting user");
-        dispatch(setUser(response.data.accessToken, true));
+        dispatch(setAuth(response.data.accessToken, true));
       }
       return response;
     },
