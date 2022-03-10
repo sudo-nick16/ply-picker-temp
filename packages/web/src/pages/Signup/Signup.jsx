@@ -8,7 +8,7 @@ import FormBottomButton from "../../components/Buttons/FormBottomButton";
 import { API_URL } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../store/store";
-import { setUser } from "../../store/reducers/userReducer";
+import { setAuth } from "../../store/reducers/userActions";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ const Signup = () => {
     if(response.data.error && !response.data.accessToken) {
       alert(response.data.error)
     }else{
-      dispatch(setUser(response.data.accessToken, true));
+      dispatch(setAuth(response.data.accessToken, true));
     }
   };
 

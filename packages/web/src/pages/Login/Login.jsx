@@ -5,7 +5,7 @@ import FormBottomButton from "../../components/Buttons/FormBottomButton";
 import FormButton from "../../components/Buttons/FormButton";
 import InputField from "../../components/InputField/InputField";
 import { API_URL } from "../../constants";
-import { setUser } from "../../store/reducers/userReducer";
+import { setAuth } from "../../store/reducers/userActions";
 import { useStore } from "../../store/store";
 import "./Login.scss";
 
@@ -37,7 +37,7 @@ const Login = () => {
       alert(response.data.error);
     } else {
       console.log(response.data.accessToken, true);
-      dispatch(setUser(response.data.accessToken, true));
+      dispatch(setAuth(response.data.accessToken, true));
       navigate("/me");
     }
   };

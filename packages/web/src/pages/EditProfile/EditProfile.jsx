@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../constants.js";
-import { setUser } from "../../store/reducers/userReducer";
+import { setAuth } from "../../store/reducers/userActions";
 import { useStore } from "../../store/store";
 import useAxios from "../../utils/useAxios.js";
 
@@ -23,7 +23,7 @@ const EditProfile = () => {
     );
 
     if (!response.data.error) {
-      dispatch(setUser(null, false));
+      dispatch(setAuth(null, false));
       navigate("/login");
     }
   };
@@ -32,7 +32,6 @@ const EditProfile = () => {
     const response = await api.post(`${API_URL}/me`);
     if (!response.data.error && response.data.accessToken) {
       const data = response.data;
-      dispatch(setUser(data.accessToken, true));
       setEmail(data.email);
       setName(data.name);
     }

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../constants.js";
-import { setUser } from "../../store/reducers/userReducer";
 import { useStore } from "../../store/store";
 import useAxios from "../../utils/useAxios.js";
 
@@ -23,19 +22,13 @@ const Profile = () => {
     );
 
     if (!response.data.error) {
-      dispatch(setUser(null, false));
       navigate("/login");
     }
   };
 
   useEffect(async () => {
-    const response = await api.post(`${API_URL}/me`);
-    if (!response.data.error && response.data.accessToken) {
-      const data = response.data;
-      dispatch(setUser(data.accessToken, true));
-      setEmail(data.email);
-      setName(data.name);
-    }
+      setEmail(state.user.email);
+      setName(state.user.name);
   }, []);
   return (
     <div>
