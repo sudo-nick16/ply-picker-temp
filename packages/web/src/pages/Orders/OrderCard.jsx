@@ -29,13 +29,13 @@ const OrderCard = ({ order }) => {
   return (
     <div className="order-card-container">
       <img
-        src={prod.Product_Image}
+        src={prod.attributes.image[0]}
         onClick={() => navigate(`/orders/${order._id}`)}
         alt=""
       />
       <div className="order-container-details">
         <h6>Placed on {getDate(order.createdAt)}</h6>
-        <p>{prod.Product_Name}</p>
+        <p>{prod.name}</p>
         <h6>Items: {order.order_items.length}</h6>
         <h6>Cost: Rs {order.total}</h6>
       </div>

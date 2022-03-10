@@ -21,15 +21,15 @@ const ProductCard = ({ p_id, quantity, price }) => {
   return loading ? null : (
     <div className="product-container">
       <img
-        src={product.Product_Image}
+        src={product.attributes.image[0]}
         alt=""
         onClick={() => navigate(`/productdetails/${p_id}`)}
       />
       <div className="product-details">
         <h4 onClick={() => navigate(`/productdetails/${p_id}`)}>
-          {product.Product_Name}
+          {product.name}
         </h4>
-        <p className="text-truncate">{product.Product_Description}</p>
+        <p className="text-truncate">{product.description}</p>
         <h6>Quantity: {quantity}</h6>
         <h6>Cost: {price}</h6>
       </div>
