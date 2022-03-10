@@ -35,12 +35,14 @@ const OrderSchema = new mongoose.Schema(
     },
     address: {
       type: {
-        address_line_1: String,
-        address_line_2: String,
+        name: String,
+        address: String,
+        mobile: String,
+        landmark: String,
         city: String,
         state: String,
-        country: String,
         pincode: String,
+        country: String,
       },
       required: true,
     },

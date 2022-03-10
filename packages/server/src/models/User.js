@@ -39,12 +39,14 @@ const UserSchema = new mongoose.Schema(
     addresses: {
       type: [
         {
-          address_line_1: String,
-          address_line_2: String,
+          name: String,
+          address: String,
+          mobile: String,
+          landmark: String,
           city: String,
           state: String,
-          country: String,
           pincode: String,
+          country: String,
         },
       ],
       default: [],
