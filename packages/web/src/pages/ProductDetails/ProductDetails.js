@@ -109,6 +109,7 @@ const ProductDetails = () => {
     const data = await (
       await axios.get(`${API_URL}/products/${productID}`)
     ).data;
+    console.log(data)
     setProduct(data);
     document.title = `Buy ${capitalizeFirstLetter(data.name)}`;
     setGroupID(data.Group);
@@ -132,7 +133,7 @@ const ProductDetails = () => {
                       src={item.product_image[index]}
                       alt={item.product_name}
                     /> */}
-              <img src={product.attributes.image[0]} alt={product.name} />
+              <img src={product?.attributes?.image[0]} alt={product.name} />
             </div>
 
             {/* <div
