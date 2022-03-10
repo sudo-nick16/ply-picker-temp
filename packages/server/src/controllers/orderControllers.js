@@ -41,12 +41,12 @@ export const createOrder = async (req, res) => {
   try {
     const total = cartItems.reduce((amt, item) => {
       const cartItemTotal =
-        parseFloat(item.product_id.Product_Price) * item.quantity;
+        parseFloat(item.product_id.actual_price) * item.quantity;
       return amt + cartItemTotal;
     }, 0);
 
     const order_items = cartItems.map((item) => {
-      let price = parseFloat(item.product_id.Product_Price) * item.quantity;
+      let price = parseFloat(item.product_id.actual_price) * item.quantity;
       let quantity = item.quantity;
       let product = item.product_id._id;
       return {
@@ -64,10 +64,9 @@ export const createOrder = async (req, res) => {
       user_id: _id,
       order_items,
       total,
-      address: address || user.address[0] || {},
+      address: (Object.keys(address).length? address: null) || user.addresses[0],
       contact_number: contact_number || user.mobile_number,
     });
-
     await order.save();
     // send a message to the delivery guy
     try {
@@ -91,7 +90,12 @@ export const createOrder = async (req, res) => {
       order_id: order._id,
     });
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
+    if(err.message.includes("validation failed: address")){
+      return res.status(400).json({
+        error: "Please add an address in ur profile section.",
+      });
+    }
     return res.status(400).json({
       error: "Could not place order",
     });
