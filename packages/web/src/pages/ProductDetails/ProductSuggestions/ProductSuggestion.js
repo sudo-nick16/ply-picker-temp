@@ -70,20 +70,20 @@ function ProductSuggestion(props) {
     ],
   };
 
-  const Item = (props) => (
-    <div className="suggestion_product_main" onClick={()=>navigate(`/productdetails/${props.id}`)}>
+  const Item = ({id, name, price, image}) => (
+    <div className="suggestion_product_main" onClick={()=>navigate(`/productdetails/${id}`)}>
       <div className="suggestion_container_leftside">
         <div className="production_suggestion_pimage">
-          <img src={props.image} alt="" />
+          <img src={image} alt="" />
         </div>
       </div>
       <div className="suggestion_container_rightiside">
         <div
           className="product_suggestion_pname text-truncate"
         >
-          {lengthyText(props.name, 15)}
+          {lengthyText(name, 15)}
         </div>
-        <div className="product_suggestion_pamount">{props.price}</div>
+        <div className="product_suggestion_pamount">₹ {price}</div>
       </div>
     </div>
   );
@@ -95,9 +95,10 @@ function ProductSuggestion(props) {
           {props.data.map((item, i) => (
             <Item key={i}
               id={item._id}
-              name={item.Product_Name}
-              price={item.Product_Price}
-              image={item.Product_Image}
+              name={item.name}
+              price={item.actual_price}
+              image={item?.attributes?.image[0]}
+              // image={"https://images.unsplash.com/photo-1646617747557-13b45b277bc6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"}
             />
           ))}
         </Slider>

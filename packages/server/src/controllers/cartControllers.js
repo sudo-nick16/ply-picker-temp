@@ -97,7 +97,7 @@ export const removeProductFromCart = async (req, res) => {
 
 export const addToCart = async (req, res) => {
   const { product_id } = req.body;
-  if(!product_id) {
+  if (!product_id) {
     return res.status(404).json({
       error: "Invalid Product Id. Could not add to cart.",
     });
@@ -114,11 +114,9 @@ export const addToCart = async (req, res) => {
   }).exec();
   //   console.log(cartItem);
   if (cartItem) {
-    if (cartItem.quantity + 1 <= product.Quantity) {
-      console.log("adding product to cart");
-      cartItem.quantity = cartItem.quantity + 1;
-      await cartItem.save();
-    }
+    console.log("adding product to cart");
+    cartItem.quantity = cartItem.quantity + 1;
+    await cartItem.save();
   } else {
     const newCartItem = new CartItem({
       user_id: req.user._id,

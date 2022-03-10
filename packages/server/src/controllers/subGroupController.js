@@ -32,3 +32,9 @@ export const getSubGroups = (req, res) => {
         res.status(200).json(data);
     });
 };
+
+export const remove = (req, res) => {
+    SubGroup.findByIdAndRemove(req.params.subGroupID).then(doc => {
+      res.send(doc)
+    }).catch(err => res.status(400).send(err))
+  }

@@ -31,3 +31,9 @@ export const getGroups = (req, res) => {
     res.status(200).json(data);
   });
 };
+
+export const remove = (req, res) => {
+  Group.findByIdAndRemove(req.params.groupID).then(doc => {
+    res.send(doc)
+  }).catch(err => res.status(400).send(err))
+}

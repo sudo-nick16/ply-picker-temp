@@ -31,3 +31,9 @@ export const getSubCategories = (req, res) =>{
         res.status(200).json(data)
     })
 }
+
+export const remove = (req,res)=>{
+    SubCategory.findByIdAndRemove(req.params.subcategoryID).then(doc=>{
+        res.send(doc)
+    }).catch(err=>res.status(400).send(err))
+}

@@ -85,9 +85,9 @@ const ProductDetails = () => {
     }
   };
 
-  const buyNowHandler = (p_id) => {
-    addToCart(p_id, 1);
-    navigate("/cart");
+  const buyNowHandler = async(p_id) => {
+    await addToCart(p_id, 1)
+    navigate("/cart")
   };
 
   const addToWishlist = async (p_id) => {
@@ -110,7 +110,7 @@ const ProductDetails = () => {
       await axios.get(`${API_URL}/products/${productID}`)
     ).data;
     setProduct(data);
-    document.title = `Buy ${capitalizeFirstLetter(data.Product_Name)}`;
+    document.title = `Buy ${capitalizeFirstLetter(data.name)}`;
     setGroupID(data.Group);
   }, [location]);
 
@@ -118,6 +118,7 @@ const ProductDetails = () => {
     const data = await (
       await axios.get(`${API_URL}/products?Group=${groupID}&limit=10`)
     ).data;
+    console.log(data)
     setProductsWithGroup(data);
   }, []);
 
@@ -132,7 +133,7 @@ const ProductDetails = () => {
                       src={item.product_image[index]}
                       alt={item.product_name}
                     /> */}
-              <img src={product.Product_Image} alt={product.Product_Name} />
+              <img src={product?.attributes?.image[0]} alt={product.name} />
             </div>
 
             {/* <div
@@ -151,22 +152,22 @@ const ProductDetails = () => {
           </div>
           <div className="productdetails_rightside">
             <div className="productdetail_heading">
-              <h2>{product.Product_Name}</h2>
+              <h2>{product.name}</h2>
             </div>
             <div className="productdetail_brand">
               <h2>
-                by: <span>{capitalizeFirstLetter(`${product.Brand}`)}</span>
+                by: <span>{capitalizeFirstLetter(`${product.brand}`)}</span>
               </h2>
             </div>
             <div className="productdetail_rating">
               <StarRating />
             </div>
             <div className="productdetail_description">
-              {product.Product_Description}
+              {product.description}
             </div>
             <div className="productdetail_price">
               {/* <span>{item.product_currency}</span> {item.price} */}
-              <span>₹</span> {product.Product_Price}
+              <span>₹</span> {product.actual_price}
             </div>
             {/* <div className="productdetail_color">
                     {item.colors.map((color, colorindex) => (
@@ -180,7 +181,7 @@ const ProductDetails = () => {
                       </div>
                     ))}
                   </div> */}
-            <div className="productdetail_code">{product.Model_no}</div>
+            <div className="productdetail_code">{product.model_no}</div>
             <div className="productdetail_button_container">
               <div
                 className="productdetail_button_1"
