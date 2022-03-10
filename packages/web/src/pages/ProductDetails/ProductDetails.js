@@ -109,7 +109,6 @@ const ProductDetails = () => {
     const data = await (
       await axios.get(`${API_URL}/products/${productID}`)
     ).data;
-    console.log(data)
     setProduct(data);
     document.title = `Buy ${capitalizeFirstLetter(data.name)}`;
     setGroupID(data.Group);
@@ -119,6 +118,7 @@ const ProductDetails = () => {
     const data = await (
       await axios.get(`${API_URL}/products?Group=${groupID}&limit=10`)
     ).data;
+    console.log(data)
     setProductsWithGroup(data);
   }, []);
 
