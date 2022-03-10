@@ -29,6 +29,22 @@ const DeliveryPage = () => {
       <h5>Payment Status: {order.payment.status.toLowerCase()}</h5>
       <h5>Amount to be paid: Rs. {order.total}</h5>
       <h5>Total Items: {order.order_items.length}</h5>
+      <div className="address-container">
+        <h5>Address:</h5>
+        <p>
+          {order.address.name}
+          <br />
+          {order.address.address}
+          <br />
+          {order.address.city}
+          <br />
+          {order.address.state}
+          <br />
+          {order.address.country}
+          <br />
+          {order.address.pincode}
+        </p>
+      </div>
       {order.order_items.map((prod) => {
         return (
           <ProductCard
