@@ -8,7 +8,6 @@ import EditProfile from "../pages/EditProfile/EditProfile";
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
 import Login from "../pages/Login/Login";
 import Products from "../pages/Products/Products";
-import Product from "../pages/Product/Product";
 import Profile from "../pages/Profile/Profile";
 import ResetPassword from "../pages/ResetPassword/ResetPassword";
 import Signup from "../pages/Signup/Signup";
