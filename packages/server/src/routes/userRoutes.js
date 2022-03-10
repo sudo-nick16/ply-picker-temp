@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { me, updateMe, updatePassword } from "../controllers/userControllers.js";
+import { addAddress, me, updateMe, updatePassword } from "../controllers/userControllers.js";
 import { auth } from "../middlewares/auth.js";
 
 const router = Router();
@@ -15,5 +15,9 @@ router.patch("/me", auth, (req, res) => {
 router.patch("/me/password", auth, (req, res) => {
   updatePassword(req, res);
 });
+
+router.post("/me/addresses", auth, (req, res) => {
+  addAddress(req, res);
+})
 
 export default router;
