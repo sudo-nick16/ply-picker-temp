@@ -7,12 +7,11 @@ import "./DeliveryPage.scss";
 
 const DeliveryPage = () => {
   const [order, setOrder] = useState({ order_items: [] });
-  const api = useAxios();
   const { order_id } = useParams();
   const [loading, setLoading] = useState(true);
 
   useEffect(async () => {
-    const res = await api.get(`/orders/${order_id}`);
+    const res = await axios.get(`${API_URL}/delivery/orders/${order_id}`);
     if (!res.data.error) {
       setOrder(res.data);
     } else {
