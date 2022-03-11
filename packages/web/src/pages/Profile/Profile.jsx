@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../../constants.js";
+import { setAuth } from "../../store/reducers/userActions.js";
 import { useStore } from "../../store/store";
 import useAxios from "../../utils/useAxios.js";
 
@@ -22,6 +23,7 @@ const Profile = () => {
     );
 
     if (!response.data.error) {
+      dispatch(setAuth("", false));
       navigate("/login");
     }
   };

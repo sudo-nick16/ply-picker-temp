@@ -192,17 +192,14 @@ export const login = async (req, res) => {
 
   setCookies(res, user);
   return res.status(200).json({
+    user: user,
     accessToken: createAccessToken(user),
     msg: "User logged in.",
   });
 };
 
 export const logout = async (req, res) => {
-  res.cookie(COOKIE_NAME, "", {
-    maxAge: 1,
-    httpOnly: true,
-  });
-
+  res.clearCookie(COOKIE_NAME);
   return res.status(200).json({
     msg: "User logged out.",
   });
@@ -283,6 +280,7 @@ export const resetPassword = async (req, res) => {
 export const refreshToken = async (req, res) => {
   const token = req.cookies.plypicker;
   let payload;
+  console.log("refresh token");
   try {
     if (!token) {
       throw new Error("No token");

@@ -5,9 +5,11 @@ import useAxios from "../../../utils/useAxios";
 import "./Wishlist.css";
 import Lottie from 'react-lottie';
 import * as emptyAnimationData from "../../../components/emptyAnimation/empty.json"
+import { useStore } from "../../../store/store";
 
 function Wishlist(props) {
   const api = useAxios();
+  const [state, dispatch] = useStore();
   const [wishlist, setWishlist] = useState([]);
 
   const removeFromWishlist = async (id) => {
@@ -33,22 +35,13 @@ function Wishlist(props) {
       setWishlist(wishlist.filter((item) => item._id !== p_id));
       removeFromWishlist(p_id);
     } else {
-      alert("Bad boi")
+      alert(res.data.error)
     }
   };
 
   useEffect(async () => {
-    try {
-      const res = await api.get(`${API_URL}/wishlist`);
-      if (!res.data.error) {
-        console.log("wishlist data", res.data);
-        setWishlist(res.data);
-      } else {
-        alert(res.data.error);
-      }
-    } catch (err) {
-      // alert(err);
-
+    if(state.authenticated){
+      setWishlist(state.user.wishlist);
     }
   }, []);
 

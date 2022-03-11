@@ -60,7 +60,6 @@ const useAxios = () => {
         }
       } catch (err) {
         console.log("expired");
-        isExpired = true;
       }
       const accessToken = await refreshToken();
       // console.log("inside recep", state.accessToken);

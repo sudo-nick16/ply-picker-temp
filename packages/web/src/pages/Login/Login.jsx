@@ -1,11 +1,11 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useNavigationType } from "react-router-dom";
 import FormBottomButton from "../../components/Buttons/FormBottomButton";
 import FormButton from "../../components/Buttons/FormButton";
 import InputField from "../../components/InputField/InputField";
 import { API_URL } from "../../constants";
-import { setAuth } from "../../store/reducers/userActions";
+import { setAuth, setUser } from "../../store/reducers/userActions";
 import { useStore } from "../../store/store";
 import "./Login.scss";
 
@@ -33,12 +33,13 @@ const Login = () => {
       withCredentials: true,
     });
     console.log(response, "response");
-    if (response.data.error && !response.data.accessToken) {
-      alert(response.data.error);
-    } else {
+    if (!response.data.error && response.data.accessToken && response.data.user) {
       console.log(response.data.accessToken, true);
+      dispatch(setUser(response.data.user));
       dispatch(setAuth(response.data.accessToken, true));
       navigate("/me");
+    } else {
+      alert(response.data.error);
     }
   };
 
