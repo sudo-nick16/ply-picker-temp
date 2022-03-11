@@ -12,7 +12,8 @@
         "server:dev:lerna": "lerna run dev --scope=@plypicker/server",
         "web:dev": "yarn workspace @plypicker/web start",
         "server:dev": "yarn workspace @plypicker/server dev",
-        "dev": "concurrently \"yarn web:dev\" \"yarn server:dev\""
+        "dev": "concurrently \"yarn web:dev\" \"yarn server:dev\"",
+        "server:prod": "yarn workspace @plypicker/server start"
     },
     "dependencies": {
         "concurrently": "^7.0.0"

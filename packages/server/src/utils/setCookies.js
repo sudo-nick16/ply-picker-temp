@@ -8,6 +8,6 @@ export const setCookies = (res, user) => {
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 24 * 7,
     secure: _env_ === "production" ? true : false,
-    sameSite: "lax",
+    sameSite: _env_ === "production" ? "none" : "lax",
   });
 };
