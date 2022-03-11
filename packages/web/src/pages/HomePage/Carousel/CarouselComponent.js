@@ -1,7 +1,6 @@
 import React from "react";
 import "./Carousel.css";
 import Carousel from "react-bootstrap/Carousel";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 function CarouselComponent() {
   return (
