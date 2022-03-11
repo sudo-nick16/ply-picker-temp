@@ -7,7 +7,7 @@ import CategoryRouter from "./routes/categoryRoutes.js";
 import SubCategoryRouter from "./routes/subCategoryRoutes.js";
 import ProductRouter from "./routes/product.js";
 import GroupRouter from "./routes/groupRoutes.js";
-import SubGroupRouter from "./routes/subGroupRoutes.js"
+import SubGroupRouter from "./routes/subGroupRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import mongoose from "mongoose";
 import cors from "cors";
