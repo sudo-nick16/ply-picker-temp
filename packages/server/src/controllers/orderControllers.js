@@ -73,7 +73,7 @@ export const createOrder = async (req, res) => {
       const msg = await twilioClient.messages.create({
         // in prod
         messagingServiceSid: DELIVERY_MSG_ID,
-        body: `New Order Placed by ${user.name}\nOrder Id: ${order._id} \nURL: http://localhost:3000/delivery/orders/${order._id}`,
+        body: `New Order Placed by ${user.name}\nOrder Id: ${order._id} \nURL: ${ORIGIN}/delivery/orders/${order._id}`,
         // from: TWILIO_NUMBER,
         to: DELIVERY,
         setTimeout: 10000,
