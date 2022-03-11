@@ -8,7 +8,7 @@ import "./MegaMenu.css";
 import "../Wishlist/Wishlist.css";
 import { FaRegHeart } from "react-icons/fa";
 import Wishlist from "../Wishlist/Wishlist";
-import logo from "../../images/logo.png";
+import logo from "../../../assets/logo.png";
 import { API_URL } from "../../../constants";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import Triangle from "../../../components/Triangle/Triangle";

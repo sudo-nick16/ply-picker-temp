@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import { StoreProvider } from "./store/store";
 import { initialState, userReducer } from "./store/reducers/userReducer";
-// import reportWebVitals from './reportWebVitals';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 
 ReactDOM.render(
@@ -13,5 +13,3 @@ ReactDOM.render(
   </StoreProvider>,
   document.getElementById("root")
 );
-
-// reportWebVitals();

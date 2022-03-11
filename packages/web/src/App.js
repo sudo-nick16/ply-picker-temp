@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-
 import { API_URL } from "./constants";
 import Routes from "./utils/Routes";
 import { logout, setUser, setAuth } from "./store/reducers/userActions";
 import { useStore } from "./store/store";
 import axios from "axios";
 import useAxios from "./utils/useAxios";
+import logo from "./assets/logo.png"
+import "./App.css"
 
 function App() {
   const [, dispatch] = useStore();
@@ -40,7 +41,7 @@ function App() {
     setLoading(false);
   }, []);
 
-  return loading ? <div>hELlo Boi</div> : <Routes />;
+  return loading ? <div className="loadingContainer" ><img src={logo} className='img-fluid' /></div> : <Routes />;
 }
 
 export default App;
