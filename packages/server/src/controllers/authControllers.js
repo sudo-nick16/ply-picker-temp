@@ -21,6 +21,7 @@ import {
 } from "../constants.js";
 import { createAccessToken } from "../utils/authTokens.js";
 import { createMobileToken } from "../utils/createMobileToken.js";
+import mongoose from "mongoose";
 
 // creating twilio client
 const twilioClient = new twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
@@ -142,17 +143,14 @@ export const register = async (req, res) => {
 
     await newUser.save();
 
-    const mobile = await Mobile.findOneAndUpdate({ mobile_number: number }, [
-      {
-        $set: {
-          registered: true,
-          user: newUser._id,
-        },
-      },
-    ]).exec();
+    mobile.registered = true;
+    mobile.user = mongoose.Types.ObjectId(newUser._id);
+    console.log(mobile, "mobile");
+    await mobile.save();
 
     setCookies(res, newUser);
     return res.status(200).json({
+      user: newUser,
       accessToken: createAccessToken(newUser),
       msg: "User created.",
     });
