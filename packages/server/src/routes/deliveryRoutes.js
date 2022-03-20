@@ -4,7 +4,7 @@ import { auth } from "../middlewares/auth.js";
 
 const delRouter = Router();
 
-delRouter.get("/:order_id", auth, (req, res) => {
+delRouter.get("/:order_id", (req, res) => {
   getDelOrder(req, res);
 });
 
