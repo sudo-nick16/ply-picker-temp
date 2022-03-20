@@ -10,9 +10,10 @@ const DeliveryPage = () => {
   const [order, setOrder] = useState({ order_items: [] });
   const { order_id } = useParams();
   const [loading, setLoading] = useState(true);
+  const api = useAxios();
 
   useEffect(async () => {
-    const res = await axios.get(`${API_URL}/delivery/orders/${order_id}`);
+    const res = await api.get(`/delivery/orders/${order_id}`);
     if (!res.data.error) {
       setOrder(res.data);
     } else {
