@@ -13,7 +13,7 @@ const DeliveryPage = () => {
   const api = useAxios();
 
   useEffect(async () => {
-    const res = await api.get(`/delivery/orders/${order_id}`);
+    const res = await api.get(`${API_URL}/delivery/orders/${order_id}`);
     if (!res.data.error) {
       setOrder(res.data);
     } else {
