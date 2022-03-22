@@ -168,7 +168,7 @@ export const login = async (req, res) => {
 
   let user;
   if (validator.isEmail(emailOrMobile)) {
-    user = await User.findOne({ emailOrMobile }).exec();
+    user = await User.findOne({ email: emailOrMobile }).exec();
   } else if (validator.isMobilePhone(`+91${emailOrMobile}`, "en-IN")) {
     user = await User.findOne({ mobile_number: `+91${emailOrMobile}` }).exec();
   }
@@ -262,6 +262,7 @@ export const resetPassword = async (req, res) => {
       throw new Error("Invalid token");
     }
     user.password = await hashPassword(password);
+    console.log("new password", user.password);
     user.token_version += 1;
     await user.save();
     return res.status(200).json({
