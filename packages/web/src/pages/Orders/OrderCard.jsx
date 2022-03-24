@@ -6,6 +6,7 @@ import "./OrderCard.scss";
 
 const OrderCard = ({ order }) => {
   const [prod, setProduct] = useState({});
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const getDate = (date) => {
@@ -24,9 +25,11 @@ const OrderCard = ({ order }) => {
     } else {
       console.log(res.data.error);
     }
+    setLoading(false);
   }, []);
 
   return (
+    !loading ?
     <div className="order-card-container">
       <img
         src={prod.attributes.image[0]}
@@ -40,6 +43,8 @@ const OrderCard = ({ order }) => {
         <h6>Cost: Rs {order.total}</h6>
       </div>
     </div>
+    :
+    <></>
   );
 };
 
