@@ -64,16 +64,16 @@ export const getWishList = async (req, res) => {
         "name",
         "actual_price",
         "discount_price",
-        "Product_Image",
+        "attributes",
         "description",
       ],
     })
     .exec();
-  // console.log(user, "user");
-  if (!user) {
-    return res.status(404).json({
-      error: "User not found. Could not get wishlist.",
-    });
-  }
+    if (!user) {
+      return res.status(404).json({
+        error: "User not found. Could not get wishlist.",
+      });
+    }
+    console.log(user.wishlist, "user");
   return res.status(200).json(user.wishlist);
 };
