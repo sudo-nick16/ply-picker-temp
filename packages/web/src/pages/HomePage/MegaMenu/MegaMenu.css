@@ -2,6 +2,12 @@
   position: relative;
 }
 
+.accountIconNav{
+  margin: 0px 10px;
+  cursor: pointer;
+  font-size: min(calc(12px + 0.7vw), 17px);
+}
+
 .navbar_wishlist {
   position: absolute;
   right: 100px;

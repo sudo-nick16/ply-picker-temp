@@ -2,16 +2,17 @@ import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
 import { useMediaQuery } from "react-responsive";
 import { Link, useNavigate } from "react-router-dom";
-import capitalizeFirstLetter from "../../../helperFunctions/capitalizeFirstLetter"
+import capitalizeFirstLetter from "../../../helperFunctions/capitalizeFirstLetter";
 import SearchComponent from "../Search/SearchComponent";
 import "./MegaMenu.css";
 import "../Wishlist/Wishlist.css";
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaUserAlt } from "react-icons/fa";
 import Wishlist from "../Wishlist/Wishlist";
 import logo from "../../../assets/logo.png";
 import { API_URL } from "../../../constants";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import Triangle from "../../../components/Triangle/Triangle";
+import ProfileCard from "./ProfileCard";
 
 const MegaMenu = () => {
   let isMobileOrTablet = useMediaQuery({
@@ -33,7 +34,7 @@ const MegaMenu = () => {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [groups, setGroups] = useState([]);
-  const [subGroups, setSubGroups] = useState([])
+  const [subGroups, setSubGroups] = useState([]);
   const [brands, setBrands] = useState([]);
 
   const [navbarWishlist, setNavbarWishlist] = useState(false);
@@ -83,13 +84,12 @@ const MegaMenu = () => {
 
   const getSubGroups = async () => {
     try {
-      const subGroupData = await (await axios.get(`${API_URL}/subgroups`)).data
-      setSubGroups(subGroupData)
+      const subGroupData = await (await axios.get(`${API_URL}/subgroups`)).data;
+      setSubGroups(subGroupData);
+    } catch (err) {
+      console.error(err);
     }
-    catch (err) {
-      console.error(err)
-    }
-  }
+  };
 
   // takes category id and search for all the products in that category and maintain an array of unique brands from them.
   useEffect(() => {
@@ -98,7 +98,7 @@ const MegaMenu = () => {
 
   const getBrands = async () => {
     try {
-      if (!activeCategory) return
+      if (!activeCategory) return;
       const brandsData = await (
         await axios.get(`${API_URL}/products?category=${activeCategory}`)
       ).data;
@@ -197,7 +197,9 @@ const MegaMenu = () => {
                 >
                   {capitalizeFirstLetter(subCat.Sub_Category_name)}
                 </div>
-                {activeSubCat === subCat._id ? <Triangle color={'#F2F2F2'} /> : null}
+                {activeSubCat === subCat._id ? (
+                  <Triangle color={"#F2F2F2"} />
+                ) : null}
               </div>
             </Link>
           ))}
@@ -223,7 +225,7 @@ const MegaMenu = () => {
           >
             <div
               onMouseOver={() => {
-                setActiveGroup(props._id)
+                setActiveGroup(props._id);
               }}
               className="groupItem"
               key={props._id}
@@ -232,11 +234,11 @@ const MegaMenu = () => {
                 style={{
                   fontWeight: activeGroup == props._id ? "bold" : "inherit",
                   color: activeGroup == props._id ? "#F16512" : "inherit",
-                }}>
-
+                }}
+              >
                 {capitalizeFirstLetter(props.Group_name)}
               </div>
-              {activeGroup === props._id ? <Triangle color={'white'} /> : null}
+              {activeGroup === props._id ? <Triangle color={"white"} /> : null}
             </div>
           </Link>
         );
@@ -256,24 +258,48 @@ const MegaMenu = () => {
     };
 
     const SubGroupMenu = () => {
-      let subGroupData = subGroups.filter(subGroup => subGroup.Category === activeCategory && subGroup.Sub_Category === activeSubCat && subGroup.Group === activeGroup)
+      let subGroupData = subGroups.filter(
+        (subGroup) =>
+          subGroup.Category === activeCategory &&
+          subGroup.Sub_Category === activeSubCat &&
+          subGroup.Group === activeGroup
+      );
 
       const SubGroupItem = ({ _id, SubGroup_name }) => {
-        const [isSubGroupVisible, setIsSubGroupVisible] = useState(false)
+        const [isSubGroupVisible, setIsSubGroupVisible] = useState(false);
         return (
-          <Link to={`/products?subgroup=${_id}`} className='link' key={_id} onClick={() => setShowNavItem(false)}>
-            <div onMouseOver={() => setIsSubGroupVisible(true)} onMouseLeave={() => setIsSubGroupVisible(false)} style={{ fontWeight: isSubGroupVisible ? "bold" : "inherit", color: isSubGroupVisible ? "#F16512" : "inherit" }} className='subGroupItem'>
+          <Link
+            to={`/products?subgroup=${_id}`}
+            className="link"
+            key={_id}
+            onClick={() => setShowNavItem(false)}
+          >
+            <div
+              onMouseOver={() => setIsSubGroupVisible(true)}
+              onMouseLeave={() => setIsSubGroupVisible(false)}
+              style={{
+                fontWeight: isSubGroupVisible ? "bold" : "inherit",
+                color: isSubGroupVisible ? "#F16512" : "inherit",
+              }}
+              className="subGroupItem"
+            >
               {capitalizeFirstLetter(SubGroup_name)}
             </div>
           </Link>
-        )
-      }
+        );
+      };
       return (
         <div className="subGroupContainer">
-          {subGroupData.map(subGroup => <SubGroupItem _id={subGroup._id} SubGroup_name={subGroup.SubGroup_name} key={subGroup._id} />)}
+          {subGroupData.map((subGroup) => (
+            <SubGroupItem
+              _id={subGroup._id}
+              SubGroup_name={subGroup.SubGroup_name}
+              key={subGroup._id}
+            />
+          ))}
         </div>
-      )
-    }
+      );
+    };
 
     const PopularBrandsMenu = () => {
       const BrandItem = ({ brand }) => {
@@ -314,7 +340,7 @@ const MegaMenu = () => {
         style={{
           width: isMobileOrTablet ? "95%" : "70%",
           display: showNavItem ? "flex" : "none",
-          background: 'white'
+          background: "white",
         }}
         ref={wrapperRef}
       >
@@ -407,6 +433,8 @@ const MegaMenu = () => {
     );
   };
 
+  const [showProfileCard, setShowProfileCard] = useState(false);
+
   return (
     <div style={{ marginTop: 10 }}>
       <div className="container navBarSearchContainer">
@@ -421,8 +449,28 @@ const MegaMenu = () => {
           }}
         />
         <SearchComponent />
-        <FaRegHeart className="navBarButtons wishlistButton" size={22} onClick={() => setNavbarWishlist(true)} />
-        <AiOutlineShoppingCart onClick={() => navigate('/cart')} className="navBarButtons" size={22} />
+        <FaRegHeart
+          className="navBarButtons wishlistButton"
+          size={22}
+          onClick={() => setNavbarWishlist(true)}
+        />
+        <AiOutlineShoppingCart
+          onClick={() => navigate("/cart")}
+          className="navBarButtons"
+          size={22}
+        />
+        <div
+          className="navBarAccountIconWrapper"
+          onMouseOver={() => setShowProfileCard(true)}
+          onMouseLeave={() => setShowProfileCard(false)}
+          >
+          <FaUserAlt
+            className="accountIconNav"
+            onClick={() => navigate("/edit/profile")}
+            onMouseOver={() => setShowProfileCard(true)}
+          />
+          {showProfileCard ? <ProfileCard setShowProfileCard={setShowProfileCard} /> : <></>}
+        </div>
       </div>
       <NavBar />
     </div>

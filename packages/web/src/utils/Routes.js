@@ -78,7 +78,7 @@ const AllRoutes = () => {
           }
         />
         <Route
-          path="/profile/edit"
+          path="/edit/:section"
           element={
             <ProtectedRoute redirectTo="/login">
               <EditUser />
