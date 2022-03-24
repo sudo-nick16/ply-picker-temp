@@ -37,7 +37,7 @@ const Login = () => {
       console.log(response.data.accessToken, true);
       dispatch(setUser(response.data.user));
       dispatch(setAuth(response.data.accessToken, true));
-      navigate("/me");
+      navigate("/");
     } else {
       alert(response.data.error);
     }

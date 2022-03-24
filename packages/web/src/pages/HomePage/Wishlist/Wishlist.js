@@ -41,7 +41,12 @@ function Wishlist(props) {
 
   useEffect(async () => {
     if(state.authenticated){
-      setWishlist(state.user.wishlist);
+      const res = await api.get("/wishlist");
+      if (!res.data.error) {
+        setWishlist(res.data);
+      }else{
+        console.log(res.data.error)
+      }
     }
   }, []);
 
@@ -68,7 +73,7 @@ function Wishlist(props) {
           <div className="wishlist_product_container" key={i}>
             <div className="wishlist_product_info">
               <div className="wishlist_product_image">
-                <img width={100} height={100} src={item.Product_Image} alt="" />
+                <img width={100} height={100} src={item.attributes.image[0]} alt="" />
               </div>
               <div className="wishlist_product_text">
                 <div className="wishlist_product_text_heading">
