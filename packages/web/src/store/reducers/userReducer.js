@@ -22,6 +22,7 @@ export const userReducer = (state, action) => {
                 ...state,
                 accessToken: null,
                 authenticated: false,
+                user: null,
             };
         case "ADD_ADDRESS":{
             let {address} = action.payload;

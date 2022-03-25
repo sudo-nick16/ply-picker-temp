@@ -99,7 +99,7 @@ const AllRoutes = () => {
           exact
           path="/signup"
           element={
-            <OnlyUnauthRoute redirectTo={"/me"}>
+            <OnlyUnauthRoute redirectTo={"/"}>
               <Signup />
             </OnlyUnauthRoute>
           }
@@ -108,7 +108,7 @@ const AllRoutes = () => {
           exact
           path="/login"
           element={
-            <OnlyUnauthRoute redirectTo={"/me"}>
+            <OnlyUnauthRoute redirectTo={"/"}>
               <Login />
             </OnlyUnauthRoute>
           }
