@@ -324,4 +324,8 @@ export const refreshToken = async (req, res) => {
       error: err.message,
     });
   }
-};
+}; 
+
+export const otpLogin = async (req, res) => {
+  
+}

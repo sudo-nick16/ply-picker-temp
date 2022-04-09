@@ -18,3 +18,5 @@ export const SMTP_USER = process.env.SMTP_USER;
 export const SMTP_PASSWORD = process.env.SMTP_PASSWORD;
 export const DELIVERY_MSG_ID = process.env.DELIVERY_MSG_ID;
 export const OTP_MSG_ID = process.env.OTP_MSG_ID;
+export const RZRPAY_KEY_ID = process.env.RZRPAY_KEY_ID;
+export const RZRPAY_KEY_SECRET = process.env.RZRPAY_KEY_SECRET;

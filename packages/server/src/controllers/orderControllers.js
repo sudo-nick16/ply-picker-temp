@@ -65,7 +65,8 @@ export const createOrder = async (req, res) => {
       user_id: _id,
       order_items,
       total,
-      address: (Object.keys(address).length? address: null) || user.addresses[0],
+      address:
+        (Object.keys(address).length ? address : null) || user.addresses[0],
       contact_number: contact_number || user.mobile_number,
     });
     await order.save();
@@ -92,7 +93,7 @@ export const createOrder = async (req, res) => {
     });
   } catch (err) {
     console.log(err.message);
-    if(err.message.includes("validation failed: address")){
+    if (err.message.includes("validation failed: address")) {
       return res.status(400).json({
         error: "Please add an address in ur profile section.",
       });
@@ -108,6 +109,7 @@ export const getOrders = async (req, res) => {
   const { _id } = req.user;
   const orders = await Order.find({ user_id: _id })
     .populate({ path: "order_items" })
+    .sort({ createdAt: -1 })
     .exec();
   return res.status(200).json(orders);
 };
@@ -115,7 +117,7 @@ export const getOrders = async (req, res) => {
 export const getOrder = async (req, res) => {
   // const { _id } = req.user;
   const { order_id } = req.params;
-  console.log("order")
+  console.log("order");
   console.log(order_id);
   const order = await Order.findById(order_id)
     .populate({ path: "order_items" })

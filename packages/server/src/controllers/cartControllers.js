@@ -43,7 +43,6 @@ export const updateQuantity = async (req, res) => {
 
 export const getMyCartItems = async (req, res) => {
   const { _id } = req.user;
-  console.log("lets dies bois");
   const cartItems = await CartItem.find({ user_id: _id })
     .populate("product_id")
     .exec();

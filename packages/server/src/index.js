@@ -15,6 +15,7 @@ import { MONGODB_URI, ORIGIN, PORT } from "./constants.js";
 import wishlistRouter from "./routes/wishlistRoutes.js";
 import orderRouter from "./routes/orderRoutes.js";
 import delRouter from "./routes/deliveryRoutes.js";
+import paymentRouter from "./routes/paymentRoutes.js";
 
 const mongooseOptions = {
   autoIndex: false,
@@ -63,6 +64,7 @@ app.use("/api/auth", cors(corsOptions), authRoutes);
 app.use("/api/wishlist", cors(corsOptions), wishlistRouter);
 app.use("/api/orders", cors(corsOptions), orderRouter);
 app.use("/api/delivery/orders", cors(corsOptions), delRouter);
+app.use("/api/payment", cors(corsOptions), paymentRouter);
 
 console.log(`Listening on port ${PORT}`);
 
