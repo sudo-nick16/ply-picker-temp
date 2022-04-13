@@ -74,18 +74,18 @@ export const createInvoice = (order) => {
   };
 
   easyinvoice.createInvoice(data, async function (result) {
-    //   const uploadParams = {
-    //     Bucket: "plypicker",
-    //     Key: `invoices/${order._id}_invoice.pdf`,
-    //     Body: Buffer.from(result.pdf, "base64"),
-    //     ACL: "public-read",
-    //   };
-    //   try {
-    //     const data = await s3Client.send(new PutObjectCommand(uploadParams));
-    //     console.log(data);
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    await fs.writeFileSync(`${order._id}_invoice.pdf`, result.pdf, "base64");
+      const uploadParams = {
+        Bucket: "plypicker",
+        Key: `invoices/${order._id}_invoice.pdf`,
+        Body: Buffer.from(result.pdf, "base64"),
+        ACL: "public-read",
+      };
+      try {
+        const data = await s3Client.send(new PutObjectCommand(uploadParams));
+        console.log(data);
+      } catch (e) {
+        console.log(e);
+      }
+    // await fs.writeFileSync(`${order._id}_invoice.pdf`, result.pdf, "base64");
   });
 };
