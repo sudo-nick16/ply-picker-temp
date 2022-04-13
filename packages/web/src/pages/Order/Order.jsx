@@ -22,6 +22,7 @@ const Order = () => {
     <div className="order-container">
       <h5>Total Amount: Rs. {order.total}</h5>
       <h5>Total Items: {order.order_items.length}</h5>
+      <h6>Invoice: <a href={order.invoice}>download</a></h6>
       {order.order_items.map((prod) => {
         return <ProductCard price={prod.price} quantity={prod.quantity} p_id={prod.product} key={prod._id} />;
       })}

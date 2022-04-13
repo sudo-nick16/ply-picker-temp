@@ -121,6 +121,7 @@ export const addToCart = async (req, res) => {
       user_id: req.user._id,
       product_id,
       quantity: 1,
+      order: false
     });
     await newCartItem.save();
   }

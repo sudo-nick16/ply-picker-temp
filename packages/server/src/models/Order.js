@@ -15,6 +15,16 @@ const OrderSchema = new mongoose.Schema(
     order_items: {
       type: [
         {
+          cart_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "CartItem",
+            required: true,
+            unique: true,
+          },
+          name: {
+            type: String,
+            required: true,
+          },
           product: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Product",
@@ -32,6 +42,9 @@ const OrderSchema = new mongoose.Schema(
           },
         },
       ],
+    },
+    invoice: {
+      type: String,
     },
     address: {
       type: {
@@ -62,10 +75,15 @@ const OrderSchema = new mongoose.Schema(
         default: "PENDING",
       },
     },
-    razorpayOrderId: {
+    razorpay_order_id: {
       type: String,
       unique: true
-    }
+    },
+    // cart_ref: {
+    //   type: [mongoose.Schema.Types.ObjectId],
+    //   ref: "CartItem",
+    //   default: [],
+    // }
   },
   {
     timestamps: true,

@@ -2,18 +2,27 @@ import CartItem from "../models/CartItem.js";
 import Order from "../models/Order.js";
 import User from "../models/User.js";
 import validator from "validator";
+import razorpay from "razorpay";
 import twilio from "twilio";
 import {
   DELIVERY,
   DELIVERY_MSG_ID,
   ORIGIN,
+  RZRPAY_KEY_ID,
+  RZRPAY_KEY_SECRET,
   TWILIO_ACCOUNT_SID,
   TWILIO_AUTH_TOKEN,
   TWILIO_NUMBER,
 } from "../constants.js";
+import { createInvoice } from "../utils/createInvoice.js";
 
 // creating twilio client
 const twilioClient = new twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+
+const rzp = new razorpay({
+  key_id: RZRPAY_KEY_ID,
+  key_secret: RZRPAY_KEY_SECRET,
+});
 
 export const createOrder = async (req, res) => {
   const { _id } = req.user;
@@ -34,42 +43,90 @@ export const createOrder = async (req, res) => {
   const cartItems = await CartItem.find({ user: _id })
     .populate({ path: "product_id" })
     .exec();
+
   if (!cartItems.length) {
     return res.status(404).json({
       error: "Cart is empty. Please add some items.",
     });
   }
   try {
-    const total = cartItems.reduce((amt, item) => {
-      const cartItemTotal =
-        parseFloat(item.product_id.actual_price) * item.quantity;
-      return amt + cartItemTotal;
-    }, 0);
+    let total = 0;
 
     const order_items = cartItems.map((item) => {
-      let price = parseFloat(item.product_id.actual_price) * item.quantity;
+      let price = parseFloat(item.product_id.actual_price);
       let quantity = item.quantity;
       let product = item.product_id._id;
+      let name = item.product_id.name;
+      total += parseFloat(item.product_id.actual_price) * item.quantity;
       return {
+        cart_id: item._id,
+        name,
         price,
         quantity,
         product,
       };
     });
 
+    console.log(order_items);
+
     if (payment_mode !== "COD") {
       // razor pay integration
+      try {
+        const ord = new Order({
+          user_id: _id,
+          order_items,
+          total,
+          payment: {
+            mode: "RAZORPAY",
+            status: "PENDING",
+          },
+          address:
+            (Object.keys(address).length ? address : null) || user.addresses[0],
+          contact_number: contact_number || user.mobile_number,
+        });
+
+        const order = await rzp.orders.create({
+          amount: total * 100,
+          currency: "INR",
+          receipt: `Payment against ${ord._id}`,
+        });
+
+        console.log(order);
+
+        ord.razorpayOrderId = order.id;
+
+        ord.invoice = `https://plypicker.s3.ap-south-1.amazonaws.com/invoices/${ord._id}_invoice.pdf`;
+
+        await ord.save();
+
+        createInvoice(ord, "RAZORPAY");
+
+        return res.status(200).json({ order, mongoOrderId: ord._id });
+      } catch (err) {
+        console.log(err);
+        return res
+          .status(400)
+          .json({ error: "Razorpay order creation failed." });
+      }
     }
 
     const order = new Order({
       user_id: _id,
       order_items,
       total,
+      payment: {
+        mode: "COD",
+        status: "PENDING",
+      },
       address:
         (Object.keys(address).length ? address : null) || user.addresses[0],
       contact_number: contact_number || user.mobile_number,
     });
+    order.invoice = `https://plypicker.s3.ap-south-1.amazonaws.com/invoices/${order._id}_invoice.pdf`;
     await order.save();
+
+    createInvoice(order);
+
     // send a message to the delivery guy
     try {
       const msg = await twilioClient.messages.create({
@@ -86,7 +143,11 @@ export const createOrder = async (req, res) => {
       throw new Error("Couldn't send the order details, Please try again!");
     }
 
-    await CartItem.deleteMany({ user: _id });
+    order.order_items.map(async (item) => {
+      await CartItem.findByIdAndDelete(item.cart_id).exec();
+    });
+
+    // await CartItem.deleteMany({ $and: [{user: _id}, {order: false}] });
     return res.status(200).json({
       msg: "Order placed successfully",
       order_id: order._id,

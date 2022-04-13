@@ -20,3 +20,7 @@ export const DELIVERY_MSG_ID = process.env.DELIVERY_MSG_ID;
 export const OTP_MSG_ID = process.env.OTP_MSG_ID;
 export const RZRPAY_KEY_ID = process.env.RZRPAY_KEY_ID;
 export const RZRPAY_KEY_SECRET = process.env.RZRPAY_KEY_SECRET;
+
+export const S3_ACCESS_KEY_ID = process.env.S3_ACCESS_KEY_ID;
+export const S3_SECRET_ACCESS_KEY = process.env.S3_SECRET_ACCESS_KEY;
+export const S3_REGION = process.env.S3_REGION;

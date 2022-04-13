@@ -176,10 +176,10 @@ function CartPage() {
       return;
     }
 
-    const result = await api.post("/payment/orders", {
+    const result = await api.post("/orders", {
       address,
       phone,
-      payment_mode: "razorpay",
+      payment_mode: "RAZORPAY",
     });
 
     if (result.data.error) {
@@ -202,6 +202,7 @@ function CartPage() {
       image: "/public/favicon.ico",
       order_id: order_id,
       handler: async function (response) {
+        console.log("handlinngggggggggg");
         const data = {
           orderCreationId: order_id,
           razorpayPaymentId: response.razorpay_payment_id,
@@ -227,26 +228,28 @@ function CartPage() {
       theme: {
         color: "#F68319",
       },
+      "modal": {
+        "ondismiss": async function(props){
+          console.log(props, "proppp");
+          const result = await api.post("/payment/verify", {
+            razorpayOrderId: order_id,
+            razorpayPaymentId: "",
+          });
+
+          if(result.data.error){
+            console.log("Failed order..",result.data.error);
+          }
+         }
+    }
     };
 
     const paymentObject = new window.Razorpay(options);
     paymentObject.on('payment.failed', async function (response){
-      alert(response.error.code);
-      console.log("Yo boii", response);
-
-      const result = await api.post("/payment/verify", {
-        razorpayOrderId: response.error.metadata.order_id,
-        razorpayPaymentId: response.error.metadata.payment_id,
-        razorpaySignature: "",
-      });
-      if(result.data.error){
-        console.log("Failed order..",result.data.error);
-      }
-      paymentObject.close();
-      payAndPlaceOrder();
+      alert("Oops try again..")
     })
     paymentObject.open();
   };
+  
 
   useEffect(() => {
     const getCart = async () => {
