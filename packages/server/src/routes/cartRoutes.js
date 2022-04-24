@@ -22,7 +22,7 @@ router.patch("/:cart_id", auth, (req, res) => {
   removeProductFromCart(req, res);
 });
 
-router.get("/my-cart", auth, (req, res) => {
+router.get("/", auth, (req, res) => {
   getMyCartItems(req, res);
 });
 

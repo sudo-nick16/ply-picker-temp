@@ -91,7 +91,7 @@ export const verifyMobile = async (req, res) => {
 };
 
 export const register = async (req, res) => {
-  const { name, email, password, mobileNumber, otp } = req.body;
+  const { name, email, password, mobileNumber, otp, gender } = req.body;
   const number = `+91${mobileNumber}`;
 
   if (!validator.isEmail(email)) {
@@ -139,6 +139,7 @@ export const register = async (req, res) => {
       password: await hashPassword(password),
       mobile_number: number,
       mobile_verified: true,
+      gender,
     });
 
     await newUser.save();
@@ -324,8 +325,6 @@ export const refreshToken = async (req, res) => {
       error: err.message,
     });
   }
-}; 
+};
 
-export const otpLogin = async (req, res) => {
-  
-}
+export const otpLogin = async (req, res) => {};

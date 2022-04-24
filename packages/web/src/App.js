@@ -15,6 +15,7 @@ function App() {
 
   useEffect(async () => {
     try {
+
       const response = await axios.post(
         `${API_URL}/auth/refresh-token`,
         {},

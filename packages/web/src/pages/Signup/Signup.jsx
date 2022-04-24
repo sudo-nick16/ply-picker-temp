@@ -13,7 +13,7 @@ import { setAuth, setUser } from "../../store/reducers/userActions";
 const Signup = () => {
   const navigate = useNavigate();
   const [_, dispatch] = useStore();
-  
+
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
@@ -27,15 +27,24 @@ const Signup = () => {
       setMobile(val);
     }
   };
-  console.log(API_URL, "api url");
 
   const signUpHandler = async () => {
     switch (true) {
-      case !validator.isEmail(email): return;break;
-      case !validator.isMobilePhone(mobile): return;break;
-      case !validator.isLength(password, { min: 6 }): return;break;
-      case !validator.isLength(name, { min: 3 }): return;break;
-      case !otpSent: return;break;
+      case !validator.isEmail(email):
+        return;
+        break;
+      case !validator.isMobilePhone(mobile):
+        return;
+        break;
+      case !validator.isLength(password, { min: 6 }):
+        return;
+        break;
+      case !validator.isLength(name, { min: 3 }):
+        return;
+        break;
+      case !otpSent:
+        return;
+        break;
     }
     console.log(name, mobile, email, password, otp);
     const data = {
@@ -51,12 +60,16 @@ const Signup = () => {
       },
       withCredentials: true,
     });
-    console.log(response, "response")
-    if(!response.data.error && response.data.accessToken && response.data.user) {
+    console.log(response, "response");
+    if (
+      !response.data.error &&
+      response.data.accessToken &&
+      response.data.user
+    ) {
       dispatch(setUser(response.data.user));
       dispatch(setAuth(response.data.accessToken, true));
-    }else{
-      alert(response.data.error)
+    } else {
+      alert(response.data.error);
     }
   };
 
@@ -77,7 +90,7 @@ const Signup = () => {
     console.log("response", response);
     if (!response.data.error) {
       setOtpSent(true);
-    }else{
+    } else {
       alert(response.data.error);
     }
   };

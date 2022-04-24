@@ -168,10 +168,32 @@ export const createOrder = async (req, res) => {
 
 export const getOrders = async (req, res) => {
   const { _id } = req.user;
-  const orders = await Order.find({ user_id: _id })
+  // const orders = await Order.find({ user_id: _id })
+  const orders = await Order.find({
+    user_id: _id,
+    delivery: {
+      delivered: "true",
+    },
+  })
     .populate({ path: "order_items" })
     .sort({ createdAt: -1 })
     .exec();
+  console.log(orders, "orders");
+  return res.status(200).json(orders);
+};
+
+export const getCurrentOrders = async (req, res) => {
+  const { _id } = req.user;
+  const orders = await Order.find({
+    user_id: _id,
+    delivery: {
+      delivered: true,
+    },
+  })
+    .populate({ path: "order_items" })
+    .sort({ createdAt: -1 })
+    .exec();
+  console.log(orders);
   return res.status(200).json(orders);
 };
 

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  addToCart,
   addToWishlist,
   getWishList,
   removeFromWishlist,
@@ -14,6 +15,10 @@ wishlistRouter.post("/", auth, (req, res) => {
 
 wishlistRouter.delete("/:p_id", auth, (req, res) => {
   removeFromWishlist(req, res);
+});
+
+wishlistRouter.delete("/cart/:p_id", auth, (req, res) => {
+  addToCart(req, res);
 });
 
 wishlistRouter.get("/", auth, (req, res) => {

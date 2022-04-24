@@ -46,6 +46,21 @@ const OrderSchema = new mongoose.Schema(
     invoice: {
       type: String,
     },
+    delivery: {
+      status: {
+        type: String,
+        default: "not delivered"
+      },
+      due: {
+        type: Date,
+      },
+      delivered: {
+        type: Boolean 
+      },
+      delivered_on: {
+        type: Date,
+      }
+    },
     address: {
       type: {
         name: String,

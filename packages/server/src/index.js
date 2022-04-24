@@ -41,7 +41,7 @@ mongoose.connection.on("error", (err) => {
 
 const app = express();
 const corsOptions = {
-  origin: ORIGIN,
+  origin: [ORIGIN, "http://localhost:3001"],
   credentials: true,
 };
 

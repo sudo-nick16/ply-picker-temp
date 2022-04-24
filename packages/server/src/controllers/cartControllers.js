@@ -47,7 +47,7 @@ export const getMyCartItems = async (req, res) => {
     .populate("product_id")
     .exec();
   //   console.log(cartItems);
-  return res.status(200).send(cartItems);
+  return res.status(200).json(cartItems);
 };
 
 export const removeFromCart = async (req, res) => {
@@ -68,7 +68,7 @@ export const removeFromCart = async (req, res) => {
 export const removeProductFromCart = async (req, res) => {
   const { cart_id } = req.params;
   const cartItem = await CartItem.findById(cart_id)
-    .populate("product_id")
+    // .populate("product_id")
     .exec();
   console.log(cartItem);
   if (!cartItem) {
@@ -121,7 +121,6 @@ export const addToCart = async (req, res) => {
       user_id: req.user._id,
       product_id,
       quantity: 1,
-      order: false
     });
     await newCartItem.save();
   }

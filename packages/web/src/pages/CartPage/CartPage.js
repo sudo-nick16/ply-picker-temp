@@ -253,7 +253,7 @@ function CartPage() {
 
   useEffect(() => {
     const getCart = async () => {
-      const res = await api.get(`${API_URL}/carts/my-cart`);
+      const res = await api.get(`/carts`);
       // console.log(res.data)
       if (res.data.error) {
         alert(res.data.error);
