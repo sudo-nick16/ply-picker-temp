@@ -40,6 +40,9 @@ const OrderSchema = new mongoose.Schema(
             type: Number,
             required: true,
           },
+          image: {
+            type: String,
+          }
         },
       ],
     },
@@ -55,7 +58,8 @@ const OrderSchema = new mongoose.Schema(
         type: Date,
       },
       delivered: {
-        type: Boolean 
+        type: Boolean,
+        default: false,
       },
       delivered_on: {
         type: Date,

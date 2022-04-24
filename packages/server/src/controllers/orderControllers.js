@@ -57,6 +57,7 @@ export const createOrder = async (req, res) => {
       let quantity = item.quantity;
       let product = item.product_id._id;
       let name = item.product_id.name;
+      let image = item.product_id.attributes.image[0];
       total += parseFloat(item.product_id.actual_price) * item.quantity;
       return {
         cart_id: item._id,
@@ -64,6 +65,7 @@ export const createOrder = async (req, res) => {
         price,
         quantity,
         product,
+        image,
       };
     });
 
@@ -166,14 +168,12 @@ export const createOrder = async (req, res) => {
   // console.log(cartItems);
 };
 
-export const getOrders = async (req, res) => {
+export const getCurrOrders = async (req, res) => {
   const { _id } = req.user;
   // const orders = await Order.find({ user_id: _id })
   const orders = await Order.find({
     user_id: _id,
-    delivery: {
-      delivered: "true",
-    },
+    "delivery.delivered": false,
   })
     .populate({ path: "order_items" })
     .sort({ createdAt: -1 })
@@ -182,13 +182,21 @@ export const getOrders = async (req, res) => {
   return res.status(200).json(orders);
 };
 
-export const getCurrentOrders = async (req, res) => {
+export const getOrders = async (req, res) => {
+  const { _id } = req.user;
+  const orders = await Order.find({ user_id: _id })
+    .populate({ path: "order_items" })
+    .sort({ createdAt: -1 })
+    .exec();
+  console.log(orders, "orders");
+  return res.status(200).json(orders);
+};
+
+export const getHistoryOrders = async (req, res) => {
   const { _id } = req.user;
   const orders = await Order.find({
     user_id: _id,
-    delivery: {
-      delivered: true,
-    },
+    "delivery.delivered": true,
   })
     .populate({ path: "order_items" })
     .sort({ createdAt: -1 })
@@ -200,11 +208,22 @@ export const getCurrentOrders = async (req, res) => {
 export const getOrder = async (req, res) => {
   // const { _id } = req.user;
   const { order_id } = req.params;
+  if (!order_id) {
+    return res.status(400).json({
+      error: "Please provide order id",
+    });
+  }
   console.log("order");
   console.log(order_id);
   const order = await Order.findById(order_id)
     .populate({ path: "order_items" })
     .exec();
   console.log(order);
-  return res.status(200).json(order);
+  if (order) {
+    return res.status(200).json(order);
+  } else {
+    return res.status(404).json({
+      error: "Order not found",
+    });
+  }
 };
