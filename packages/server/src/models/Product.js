@@ -74,28 +74,24 @@ const ProductSchema = new mongoose.Schema(
             required: true,
         },
         category: {
-            type: ObjectId,
-            required: true,
+            type: String,
             ref:"Category"
         },
         sub_category: {
             type: ObjectId,
-            required: true,
             ref:"SubCategory"
         },
         group: {
             type: ObjectId,
-            required: true,
             ref:"Group"
         },
         sub_group: {
             type: ObjectId,
-            required: true,
             ref:"SubGroup"
         },
         brand: {
-            type: String,
-            required: true,
+            type: ObjectId,
+            ref:"Brand"
         },
         name: {
             type: String,

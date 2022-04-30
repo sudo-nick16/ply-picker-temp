@@ -16,6 +16,7 @@ import wishlistRouter from "./routes/wishlistRoutes.js";
 import orderRouter from "./routes/orderRoutes.js";
 import delRouter from "./routes/deliveryRoutes.js";
 import paymentRouter from "./routes/paymentRoutes.js";
+import brandRouter from "./routes/brandRoutes.js"
 
 const mongooseOptions = {
   autoIndex: false,
@@ -41,7 +42,7 @@ mongoose.connection.on("error", (err) => {
 
 const app = express();
 const corsOptions = {
-  origin: [ORIGIN, "http://localhost:3001"],
+  origin: [ORIGIN, "http://localhost:3001", "http://localhost:3000"],
   credentials: true,
 };
 
@@ -53,6 +54,7 @@ app.get("/", (_, res) => {
 });
 
 app.use("/api", cors(corsOptions), SubGroupRouter);
+app.use("/api", cors(corsOptions), brandRouter);
 app.use("/api", cors(corsOptions), GroupRouter);
 app.use("/api", cors(corsOptions), CategoryRouter);
 app.use("/api", cors(corsOptions), ProductRouter);
