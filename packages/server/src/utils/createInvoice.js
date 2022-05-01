@@ -36,7 +36,7 @@ export const createInvoice = (order) => {
       quantity: item.quantity,
       description: item.name,
       "tax-rate": 0,
-      price: item.price,
+      price: item.discounted_price,
     };
   });
 

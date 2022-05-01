@@ -139,7 +139,7 @@ export const register = async (req, res) => {
       password: await hashPassword(password),
       mobile_number: number,
       mobile_verified: true,
-      gender,
+      gender: gender || "",
     });
 
     await newUser.save();
@@ -149,9 +149,12 @@ export const register = async (req, res) => {
     console.log(mobile, "mobile");
     await mobile.save();
 
+    const repUser = newUser.toObject();
+    delete repUser.password;
+
     setCookies(res, newUser);
     return res.status(200).json({
-      user: newUser,
+      user: repUser,
       accessToken: createAccessToken(newUser),
       msg: "User created.",
     });

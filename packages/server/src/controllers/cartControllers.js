@@ -52,22 +52,24 @@ export const getMyCartItems = async (req, res) => {
 
 export const removeFromCart = async (req, res) => {
   const { cart_id } = req.params;
-  const cartItem = await CartItem.findByIdAndDelete(cart_id).exec();
+  const { _id } = req.user;
+  const cartItem = await CartItem.findOneAndDelete({ _id: cart_id, user_id: _id }).exec();
   console.log(cartItem);
   if (!cartItem) {
     return res.status(409).json({
       error: "Could not delete cart item.",
     });
   } else {
-    return res.status(200).json({
-      msg: "Cart item deleted.",
-    });
+      return res.status(200).json({
+        msg: "Cart item deleted.",
+      });
   }
 };
 
 export const removeProductFromCart = async (req, res) => {
   const { cart_id } = req.params;
-  const cartItem = await CartItem.findById(cart_id)
+  const { _id } = req.user;
+  const cartItem = await CartItem.find({ _id: cart_id, user_id: _id })
     // .populate("product_id")
     .exec();
   console.log(cartItem);

@@ -53,12 +53,12 @@ export const createOrder = async (req, res) => {
     let total = 0;
 
     const order_items = cartItems.map((item) => {
-      let price = parseFloat(item.product_id.actual_price);
+      let price = parseFloat(item.product_id.price);
       let quantity = item.quantity;
       let product = item.product_id._id;
-      let name = item.product_id.name;
-      let image = item.product_id.attributes.image[0];
-      total += parseFloat(item.product_id.actual_price) * item.quantity;
+      let name = item.product_id.product_name;
+      let image = item.product_id.attrs.imgs[0];
+      total += parseFloat(item.product_id.discounted_price) * item.quantity;
       return {
         cart_id: item._id,
         name,
@@ -172,9 +172,28 @@ export const getCurrOrders = async (req, res) => {
   const { _id } = req.user;
   // const orders = await Order.find({ user_id: _id })
   const orders = await Order.find({
-    user_id: _id,
-    "delivery.delivered": false,
-  })
+      $and :[
+        {
+          user_id: _id,
+        },
+        {
+          $or: [
+            {
+              "payment.mode": "RAZORPAY",
+              "payment.status": "SUCCESS",
+            },
+            {
+              "payment.mode": "COD",
+              "payment.status": "PENDING",
+            }
+          ]
+        },
+        {
+          "delivery.delivered": false,
+        }
+      ]
+    }
+  )
     .populate({ path: "order_items" })
     .sort({ createdAt: -1 })
     .exec();

@@ -69,8 +69,9 @@ export const list = (req, res) => {
   let searchByProdName = req.query.name ? req.query.name : "";
   let searchBySubGroup = req.query.subgroup
   let searchByGroup = req.query.group;
-  let searchByCategory = req.query.category;
-  let searchBySubCategory = req.query.subcategory;
+  let searchBybrand = req.query.brand;
+  let searchByCatagory = req.query.catagory;
+  let searchBySubCatagory = req.query.subcatagory;
   let searchByMaxPrice = req.query.max
     ? req.query.max
     : Number.MAX_SAFE_INTEGER;
@@ -78,29 +79,32 @@ export const list = (req, res) => {
 
   let filters = {};
 
-  if (searchByCategory) {
-    filters.category = searchByCategory;
+  if (searchByCatagory) {
+    filters.catagory = searchByCatagory;
   }
-  if (searchBySubCategory) {
-    filters.sub_category = searchBySubCategory;
+  if (searchBySubCatagory) {
+    filters.subcatagory = searchBySubCatagory;
   }
   if (searchByGroup) {
     filters.group = searchByGroup;
   }
 
   if (searchBySubGroup){
-    filters.sub_group = searchBySubGroup;
+    filters.subgroup = searchBySubGroup;
+  }
+  if (searchBySubGroup){
+    filters.brand = searchBybrand;
   }
 
   Product.find({
     $and: [
-      { Product_Name: { $regex: searchByProdName, $options: "$i" } },
+      { product_name: { $regex: searchByProdName, $options: "$i" } },
       filters,
-      { Product_Price: { $gte: searchByMinPrice, $lte: searchByMaxPrice } },
+      { price: { $gte: searchByMinPrice, $lte: searchByMaxPrice } },
     ],
   })
-    // .populate("category")
-    // .populate("sub_category")
+    // .populate("catagory")
+    // .populate("sub_catagory")
     // .populate("group")
     // .populate("sub_group")
     .sort([[sortBy, order]])
@@ -118,9 +122,9 @@ export const list = (req, res) => {
 export const ListRelated = (req, res) => {
   let limit = req.query.limit ? parseInt(req.query.limit) : "3";
 
-  Product.find({ _id: { $ne: req.product }, Category: req.product.Category })
+  Product.find({ _id: { $ne: req.product }, catagory: req.product.catagory })
     .limit(limit)
-    .populate("Category")
+    .populate("catagory")
     .exec((err, products) => {
       if (err) {
         res.status(400).json({
@@ -141,7 +145,7 @@ export const listBySearch = (req, res) => {
 
   for (let key in req.body.filters) {
     if (req.body.filters[key].length > 0) {
-      if (key === "Product_Price") {
+      if (key === "price") {
         findArgs[key] = {
           $gte: req.body.filters[key][0],
           $lte: req.body.filters[key][1],
@@ -153,7 +157,7 @@ export const listBySearch = (req, res) => {
   }
 
   Product.find(findArgs)
-    .populate("Category")
+    .populate("catagory")
     .sort([[sortBy, order]])
     /* .skip(skip) */
     .limit(limit)
@@ -173,13 +177,9 @@ export const listBySearch = (req, res) => {
 export const search = (req, res, next) => { };
 
 // only while testing
-// export const allProducts = async (req, res) => {
-//   const products = await Product.find().exec();
-//   console.log("all");
+export const allProducts = async (req, res) => {
+  const products = await Product.find().exec();
+  console.log("all");
 //   res.status(200).json(products);
-// };
-
-// export const getProduct = async (req, res) => {
-//   const product = await Product.findById(req.params.p_id).exec();
-//   res.status(200).json(product);
-// };
+  res.status(200).json(products.slice(0, 100));
+};
